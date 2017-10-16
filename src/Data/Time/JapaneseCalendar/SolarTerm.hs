@@ -3,6 +3,8 @@ module Data.Time.JapaneseCalendar.SolarTerm
   , solarTermToJapaneseName
   , solarTermFromJapaneseName
   , solarTerm
+  , nearestSolarTerm
+  , findNearestSolarTerm
   ) where
 
 import Data.List
@@ -75,10 +77,25 @@ solarTermFromJapaneseName name = toEnum <$> elemIndex name japaneseNames
 
 -- | returns a solar term of a specified day
 solarTerm :: TimeZone -> Day -> Maybe SolarTerm
-solarTerm zone day = if day == getDay divisionTime then Just (toEnum nearestDivisionIndex) else Nothing
+solarTerm zone day = if day == divisionDay then Just term else Nothing
   where
-    getDay = localDay . zonedTimeToLocalTime
+    (term, divisionDay) = nearestSolarTerm zone day
+
+-- | finds the nearest solar term
+nearestSolarTerm :: TimeZone -> Day -> (SolarTerm, Day)
+nearestSolarTerm zone day = fromIndex zone index day
+  where
     utcTime = localTimeToUTC zone (LocalTime day midday)
-    nearestDivisionIndex = round (sunEclipticLongitude utcTime / 15) `mod` 24
-    divisionUTCTime = sunEclipticLongitudeToTime (fromIntegral $ nearestDivisionIndex * 15) utcTime
+    index = round (sunEclipticLongitude utcTime / 15) `mod` 24
+
+-- | finds the nearest specified solar term
+findNearestSolarTerm :: TimeZone -> SolarTerm -> Day -> Day
+findNearestSolarTerm zone term day = snd $ fromIndex zone (fromEnum term) day
+
+fromIndex :: TimeZone -> Int -> Day -> (SolarTerm, Day)
+fromIndex zone index day = (toEnum index, divisionDay)
+  where
+    utcTime = localTimeToUTC zone (LocalTime day midday)
+    divisionUTCTime = sunEclipticLongitudeToTime (fromIntegral $ index * 15) utcTime
     divisionTime = utcToZonedTime zone divisionUTCTime
+    divisionDay = localDay $ zonedTimeToLocalTime divisionTime
