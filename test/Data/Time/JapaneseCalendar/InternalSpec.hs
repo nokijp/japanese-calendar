@@ -15,7 +15,7 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-  describe "eclipticLongitudeToTime" $ do
+  describe "sunEclipticLongitudeToTime" $ do
     forM_
       [ (0, timeFromYMDHMS 2000 3 1 0 0 0, timeFromYMDHMS 2000 3 20 7 35 0)
       , (0, timeFromYMDHMS 2000 4 1 0 0 0, timeFromYMDHMS 2000 3 20 7 35 0)
@@ -40,7 +40,7 @@ spec = do
       , (360, timeFromYMDHMS 2010 4 1 0 0 0, timeFromYMDHMS 2010 3 20 17 32 0)
       ] $ \(longitude, inputTime, expectedTime) ->
         it ("should return " ++ show expectedTime ++ " when given " ++ show (longitude, inputTime)) $
-          eclipticLongitudeToTime longitude inputTime `shouldSatisfy` (isAlmostEqual (20 * 60) expectedTime)
+          sunEclipticLongitudeToTime longitude inputTime `shouldSatisfy` (isAlmostEqual (20 * 60) expectedTime)
 
   describe "nearestNewMoon" $ do
     forM_

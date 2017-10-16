@@ -1,5 +1,6 @@
 module Data.Time.JapaneseCalendar.Internal
-  ( eclipticLongitudeToTime
+  ( sunEclipticLongitude
+  , sunEclipticLongitudeToTime
   , nearestNewMoon
   , solveSawtooth
   , solveCosMax
@@ -14,9 +15,12 @@ import Data.Fixed
 import Data.Time.Clock
 import Data.Time.Calendar
 
+sunEclipticLongitude :: UTCTime -> Double
+sunEclipticLongitude time = let (DD degree) = sunEclipticLongitude2 $ sunDetails $ utcTimeToJulianDate time in degree
+
 -- | estimates the nearest day when the sun's ecliptic longitude is the given value.
-eclipticLongitudeToTime :: Double -> UTCTime -> UTCTime
-eclipticLongitudeToTime longitudeInDegrees initialTime = solution
+sunEclipticLongitudeToTime :: Double -> UTCTime -> UTCTime
+sunEclipticLongitudeToTime longitudeInDegrees initialTime = solution
   where
     solution = julianDateToUTCTime $ JD finalJd
     finalJd = solveSawtooth 360 365.25 f 100 1e-5 initialJd longitudeInDegrees

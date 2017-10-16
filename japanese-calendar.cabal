@@ -7,6 +7,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Data.Time.JapaneseCalendar
                      , Data.Time.JapaneseCalendar.Internal
+                     , Data.Time.JapaneseCalendar.SolarTerm
   build-depends:       base >= 4.7 && < 5
                      , astro == 0.4.*
                      , time == 1.6.*
@@ -18,8 +19,10 @@ test-suite japanese-calendar-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   other-modules:       Data.Time.JapaneseCalendar.InternalSpec
+                     , Data.Time.JapaneseCalendar.SolarTermSpec
   build-depends:       base
                      , hspec == 2.*
+                     , QuickCheck == 2.9.*
                      , japanese-calendar
                      , time == 1.6.*
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N -Wall -Werror
