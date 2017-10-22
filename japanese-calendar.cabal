@@ -7,6 +7,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Data.Time.JapaneseCalendar
                      , Data.Time.JapaneseCalendar.Internal.Astronomy
+                     , Data.Time.JapaneseCalendar.Rokuyo
                      , Data.Time.JapaneseCalendar.SolarTerm
                      , Data.Time.JapaneseCalendar.TempoCalendar
   build-depends:       base >= 4.7 && < 5
@@ -21,6 +22,7 @@ test-suite japanese-calendar-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   other-modules:       Data.Time.JapaneseCalendar.Internal.AstronomySpec
+                     , Data.Time.JapaneseCalendar.RokuyoSpec
                      , Data.Time.JapaneseCalendar.SolarTermSpec
                      , Data.Time.JapaneseCalendar.TempoCalendarSpec
   build-depends:       base
