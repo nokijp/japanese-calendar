@@ -10,9 +10,9 @@ module Data.Time.JapaneseCalendar.SolarTerm
   , findNearestSolarTerm
   ) where
 
-import Data.List
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar.Internal.Astronomy
+import Data.Time.JapaneseCalendar.Internal.DataUtils
 import Data.Time.LocalTime
 
 data SolarTerm =
@@ -72,11 +72,11 @@ japaneseNames =
 
 -- | returns a Japanese name of a solar term
 solarTermToJapaneseName :: SolarTerm -> String
-solarTermToJapaneseName term = japaneseNames !! fromEnum term
+solarTermToJapaneseName = enumToName japaneseNames
 
 -- | converts a Japanese name of a solar term into a SolarTerm
 solarTermFromJapaneseName :: String -> Maybe SolarTerm
-solarTermFromJapaneseName name = toEnum <$> elemIndex name japaneseNames
+solarTermFromJapaneseName = enumFromName japaneseNames
 
 -- | tests whether the solar term is a segment point, sekki
 isSegmentPoint :: SolarTerm -> Bool

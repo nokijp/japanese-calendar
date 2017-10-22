@@ -15,6 +15,32 @@ main = hspec spec
 
 spec :: Spec
 spec = do
+  describe "rokuyoToJapaneseName" $ do
+    forM_
+      [ (Sensho, "先勝")
+      , (Tomobiki, "友引")
+      , (Senbu, "先負")
+      , (Butsumetsu, "仏滅")
+      , (Taian, "大安")
+      , (Shakko, "赤口")
+      ] $ \(rokuyo, name) ->
+        it ("should return " ++ show name ++ " when given " ++ show rokuyo) $
+          rokuyoToJapaneseName rokuyo `shouldBe` name
+
+  describe "rokuyoFromJapaneseName" $ do
+    forM_
+      [ ("先勝", Just Sensho)
+      , ("友引", Just Tomobiki)
+      , ("先負", Just Senbu)
+      , ("仏滅", Just Butsumetsu)
+      , ("大安", Just Taian)
+      , ("赤口", Just Shakko)
+      , ("", Nothing)
+      , ("abc", Nothing)
+      ] $ \(name, rokuyoMaybe) ->
+        it ("should return " ++ show rokuyoMaybe ++ " when given " ++ show name) $
+          rokuyoFromJapaneseName name `shouldBe` rokuyoMaybe
+
   describe "rokuyoFromTempoDate" $ do
     forM_
       [ (TempoDate 2000 (CommonMonth Mutsuki) 1, Sensho)
