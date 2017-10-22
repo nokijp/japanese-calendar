@@ -80,7 +80,7 @@ solarTermFromJapaneseName name = toEnum <$> elemIndex name japaneseNames
 
 -- | tests whether the solar term is a segment point, sekki
 isSegmentPoint :: SolarTerm -> Bool
-isSegmentPoint term = fromEnum term `mod` 2 == 0
+isSegmentPoint term = fromEnum term `mod` 2 == 1
 
 -- | tests whether the solar term is a center point, chuki
 isCenterPoint :: SolarTerm -> Bool

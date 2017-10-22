@@ -65,15 +65,18 @@ spec = do
       , (fromGregorian 2000 1 2, TempoDate (CommonMonth Shimotsuki) 26)
       , (fromGregorian 2000 1 6, TempoDate (CommonMonth Shimotsuki) 30)
       , (fromGregorian 2000 1 7, TempoDate (CommonMonth Shiwasu) 1)
-      , (fromGregorian 2001 5 22, TempoDate (CommonMonth Uzuki) 29)
+      , (fromGregorian 2001 4 24, TempoDate (CommonMonth Uzuki) 1)
       , (fromGregorian 2001 5 23, TempoDate (LeapMonth Uzuki) 1)
+      , (fromGregorian 2001 6 21, TempoDate (CommonMonth Satsuki) 1)
       , (fromGregorian 2010 1 1, TempoDate (CommonMonth Shimotsuki) 17)
       ] $ \(gregorian, tempo) ->
         it ("should convert the Gregorian date " ++ show gregorian ++ " into the Tempo date " ++ show tempo) $
           tempoDateFromGregorian jst gregorian `shouldBe` Just tempo
     forM_
-      (filter (/= 2033) [2000..2100]) $ \(year) ->
+      ([2000..2032] ++ [2035..2100]) $ \(year) ->
         it ("should be defined in " ++ show year) $
           tempoDateFromGregorian jst (fromGregorian year 5 1) `shouldSatisfy` isJust
-    it "should be indefinable in 2033" $
-      tempoDateFromGregorian jst (fromGregorian 2033 5 1) `shouldBe` Nothing
+    forM_
+      [2033, 2034] $ \(year) ->
+        it ("should be indefinable in " ++ show year) $
+          tempoDateFromGregorian jst (fromGregorian year 5 1) `shouldBe` Nothing

@@ -140,7 +140,7 @@ latestAndNextWinterSolsticeDate zone day = latestAndNext
       else (shiftNearest (-365), nearest)
 
 newMoonDatesFrom :: TimeZone -> Day -> [Day]
-newMoonDatesFrom zone day = utctDay <$> unfoldr (\d -> Just (d, succNewMoon d)) latest
+newMoonDatesFrom zone day = utcTimeToDay <$> unfoldr (\d -> Just (d, succNewMoon d)) latest
   where
     utcStartTime = localTimeToUTC zone (LocalTime day midnight)
     addUTCDays days = addUTCTime $ fromRational $ days * 24 * 60 * 60
@@ -150,6 +150,7 @@ newMoonDatesFrom zone day = utctDay <$> unfoldr (\d -> Just (d, succNewMoon d)) 
       then nearest
       else nearestNewMoon $ addUTCDays (-averageNewMoonCycle) nearest
     succNewMoon = nearestNewMoon . addUTCDays averageNewMoonCycle
+    utcTimeToDay utcTime = localDay $ utcToLocalTime zone utcTime
 
 centerPointsFrom :: TimeZone -> Day -> [(SolarTerm, Day)]
 centerPointsFrom zone day = filter (isCenterPoint . fst) $ solarTermsFrom zone day
