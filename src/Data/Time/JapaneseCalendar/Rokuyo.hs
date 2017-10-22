@@ -17,8 +17,10 @@ data Rokuyo =
   | Shakko  -- ^ 赤口
     deriving (Show, Eq, Enum, Bounded)
 
+-- | calculates a rokuyo from a Tempo date
 rokuyoFromTempoDate :: TempoDate -> Rokuyo
 rokuyoFromTempoDate (TempoDate _ month day) = toEnum $ (fromEnum (tempoMonthType month) + day - 1) `mod` 6
 
+-- | calculates a rokuyo from a Gregorian date
 rokuyoFromGregorian :: TimeZone -> Day -> Maybe Rokuyo
 rokuyoFromGregorian zone day = rokuyoFromTempoDate <$> tempoDateFromGregorian zone day
