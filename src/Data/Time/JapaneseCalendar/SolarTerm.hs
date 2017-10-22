@@ -2,8 +2,11 @@ module Data.Time.JapaneseCalendar.SolarTerm
   ( SolarTerm(..)
   , solarTermToJapaneseName
   , solarTermFromJapaneseName
+  , isSegmentPoint
+  , isCenterPoint
   , solarTerm
   , nearestSolarTerm
+  , solarTermsFrom
   , findNearestSolarTerm
   ) where
 
@@ -67,13 +70,21 @@ japaneseNames =
   , "啓蟄"
   ]
 
--- | returns a name of a solar term
+-- | returns a Japanese name of a solar term
 solarTermToJapaneseName :: SolarTerm -> String
 solarTermToJapaneseName term = japaneseNames !! fromEnum term
 
 -- | converts a Japanese name of a solar term into a SolarTerm
 solarTermFromJapaneseName :: String -> Maybe SolarTerm
 solarTermFromJapaneseName name = toEnum <$> elemIndex name japaneseNames
+
+-- | tests whether the solar term is a segment point, sekki
+isSegmentPoint :: SolarTerm -> Bool
+isSegmentPoint term = fromEnum term `mod` 2 == 0
+
+-- | tests whether the solar term is a center point, chuki
+isCenterPoint :: SolarTerm -> Bool
+isCenterPoint = not . isSegmentPoint
 
 -- | returns a solar term of a specified day
 solarTerm :: TimeZone -> Day -> Maybe SolarTerm
@@ -87,6 +98,13 @@ nearestSolarTerm zone day = fromIndex zone index day
   where
     utcTime = localTimeToUTC zone (LocalTime day midday)
     index = round (sunEclipticLongitude utcTime / 15) `mod` 24
+
+-- | creates a list of solar terms starting with the nearest solar term from a specified day
+solarTermsFrom :: TimeZone -> Day -> [(SolarTerm, Day)]
+solarTermsFrom zone day = firstElem : solarTermsFrom zone nextSeed
+  where
+    firstElem@(_, firstElemDay) = nearestSolarTerm zone day
+    nextSeed = addDays 15 firstElemDay
 
 -- | finds the nearest specified solar term
 findNearestSolarTerm :: TimeZone -> SolarTerm -> Day -> Day

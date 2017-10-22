@@ -5,8 +5,8 @@ module Data.Time.JapaneseCalendar.SolarTermSpec
 
 import Control.Monad
 import Data.Time.Calendar
+import Data.Time.JapaneseCalendar
 import Data.Time.JapaneseCalendar.SolarTerm
-import Data.Time.LocalTime
 import Test.Hspec
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property
@@ -58,6 +58,14 @@ spec = do
         it ("should return the nearest solar term " ++ show term ++ " and its date " ++ show termDay ++ " when given the day " ++ show day) $
           nearestSolarTerm jst day `shouldBe` (term, termDay)
 
+  describe "solarTermsFrom" $ do
+    it "should return a list of solar terms starting with the nearest solar term from a specified day" $
+      take 3 (solarTermsFrom jst $ fromGregorian 2000 3 25) `shouldBe`
+        [ (VernalEquinox, fromGregorian 2000 3 20)
+        , (ClearAndBright, fromGregorian 2000 4 4)
+        , (GrainRain, fromGregorian 2000 4 20)
+        ]
+
   describe "findNearestSolarTerm" $ do
     forM_
       [ (fromGregorian 2000 3 19, VernalEquinox, fromGregorian 2000 3 20)
@@ -68,6 +76,3 @@ spec = do
       ] $ \(day, term, termDay) ->
         it ("should return the date " ++ show termDay ++ " which is the start day of " ++ show term ++ " and the nearest from " ++ show day) $
           findNearestSolarTerm jst term day `shouldBe` termDay
-
-jst :: TimeZone
-jst = hoursToTimeZone 9

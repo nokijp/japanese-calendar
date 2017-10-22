@@ -2,6 +2,7 @@ module Data.Time.JapaneseCalendar.Internal
   ( sunEclipticLongitude
   , sunEclipticLongitudeToTime
   , nearestNewMoon
+  , averageNewMoonCycle
   , solveSawtooth
   , solveCosMax
   ) where
@@ -32,9 +33,12 @@ nearestNewMoon :: UTCTime -> UTCTime
 nearestNewMoon initialTime = solution
   where
     solution = julianDateToUTCTime $ JD finalJd
-    finalJd = solveCosMax 29.5 f 100 1e-5 initialJd
+    finalJd = solveCosMax averageNewMoonCycle f 100 1e-5 initialJd
     (JD initialJd) = utcTimeToJulianDate initialTime
     f x = 1 - 2 * moonPhase j2010MoonDetails (JD x)
+
+averageNewMoonCycle :: Fractional a => a
+averageNewMoonCycle = 29.5
 
 julianDateToUTCTime :: JulianDate -> UTCTime
 julianDateToUTCTime jd = UTCTime dayPart timePart
