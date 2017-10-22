@@ -11,6 +11,7 @@ import Data.Time.JapaneseCalendar.Internal.DataUtils
 import Data.Time.JapaneseCalendar.TempoCalendar
 import Data.Time.LocalTime
 
+-- | a rokuyo
 data Rokuyo =
     Sensho  -- ^ 先勝
   | Tomobiki  -- ^ 友引

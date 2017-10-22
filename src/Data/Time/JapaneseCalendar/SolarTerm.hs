@@ -15,6 +15,7 @@ import Data.Time.JapaneseCalendar.Internal.Astronomy
 import Data.Time.JapaneseCalendar.Internal.DataUtils
 import Data.Time.LocalTime
 
+-- | the twenty-four solar terms
 data SolarTerm =
     VernalEquinox  -- ^ 春分
   | ClearAndBright  -- ^ 清明

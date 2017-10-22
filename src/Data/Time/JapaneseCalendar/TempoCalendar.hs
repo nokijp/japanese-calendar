@@ -20,6 +20,7 @@ import Data.Time.JapaneseCalendar.Internal.Astronomy
 import Data.Time.JapaneseCalendar.SolarTerm
 import Data.Time.LocalTime
 
+-- | a type of a month in the Tempo calendar
 data TempoMonthType =
     Mutsuki  -- ^ 睦月
   | Kisaragi  -- ^ 如月
@@ -35,6 +36,7 @@ data TempoMonthType =
   | Shiwasu  -- ^ 師走
     deriving (Show, Eq, Bounded, Enum, Ord)
 
+-- | a month in the Tempo calendar
 data TempoMonth =
     CommonMonth { tempoMonthType :: TempoMonthType }
   | LeapMonth { tempoMonthType :: TempoMonthType }
@@ -45,6 +47,7 @@ instance Ord TempoMonth where
   (LeapMonth a) <= (CommonMonth b) = a /= b && a <= b
   (LeapMonth a) <= (LeapMonth b) = a <= b
 
+-- | a date in the Tempo calendar
 data TempoDate = TempoDate { tempoYear :: Integer, tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq, Ord)
 
 japaneseNames :: [String]
@@ -63,12 +66,12 @@ japaneseNames =
   , "師走"
   ]
 
--- | returns a Japanese name of a tempo month
+-- | returns a Japanese name of a month in the Tempo calendar
 tempoMonthToJapaneseName :: TempoMonth -> String
 tempoMonthToJapaneseName (CommonMonth monthType) = japaneseNames !! fromEnum monthType
 tempoMonthToJapaneseName (LeapMonth monthType) = "閏" ++ japaneseNames !! fromEnum monthType
 
--- | converts a Japanese name of a tempo month into a TempoMonth
+-- | converts a Japanese name of a month in the Tempo calendar into a TempoMonth
 tempoMonthFromJapaneseName :: String -> Maybe TempoMonth
 tempoMonthFromJapaneseName name = toTempoMonth . toEnum <$> elemIndex ordinalName japaneseNames
   where
@@ -89,7 +92,7 @@ previousTempoMonthType monthType = pred monthType
 data TempoMonthInterval = TempoMonthInterval { _intervalTempoMonth :: TempoMonth, _intervalFirstDay :: Day, _intervalLastDay :: Day }
 data MonthSeed = MonthSeed { _seedFirstDay :: Day, _seedLastDay :: Day, _seedCenterPoints :: [SolarTerm] }
 
--- | converts a Gregorian date into a Tempo date
+-- | converts a date in the Gregorian calendar into a date in the Tempo calendar
 tempoDateFromGregorian :: TimeZone -> Day -> Maybe TempoDate
 tempoDateFromGregorian zone day = do
   intervals <- tempoMonthsInAYear zone day
