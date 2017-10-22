@@ -1,4 +1,4 @@
-module Data.Time.JapaneseCalendar.InternalSpec
+module Data.Time.JapaneseCalendar.Internal.AstronomySpec
   ( main
   , spec
   ) where
@@ -6,7 +6,7 @@ module Data.Time.JapaneseCalendar.InternalSpec
 import Control.Monad
 import Data.Time.Clock
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar.Internal
+import Data.Time.JapaneseCalendar.Internal.Astronomy
 import Prelude hiding (cycle)
 import Test.Hspec
 

@@ -16,7 +16,7 @@ import Data.List
 import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Clock
-import Data.Time.JapaneseCalendar.Internal
+import Data.Time.JapaneseCalendar.Internal.Astronomy
 import Data.Time.JapaneseCalendar.SolarTerm
 import Data.Time.LocalTime
 
@@ -42,7 +42,7 @@ data TempoMonth =
 instance Ord TempoMonth where
   (CommonMonth a) <= (CommonMonth b) = a <= b
   (CommonMonth a) <= (LeapMonth b) = a <= b
-  (LeapMonth a) <= (CommonMonth b) = if a == b then False else a <= b
+  (LeapMonth a) <= (CommonMonth b) = a /= b && a <= b
   (LeapMonth a) <= (LeapMonth b) = a <= b
 
 data TempoDate = TempoDate { tempoYear :: Integer, tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq, Ord)

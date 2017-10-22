@@ -12,7 +12,7 @@ module Data.Time.JapaneseCalendar.SolarTerm
 
 import Data.List
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar.Internal
+import Data.Time.JapaneseCalendar.Internal.Astronomy
 import Data.Time.LocalTime
 
 data SolarTerm =

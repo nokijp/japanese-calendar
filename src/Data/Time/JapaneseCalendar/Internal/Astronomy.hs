@@ -1,4 +1,4 @@
-module Data.Time.JapaneseCalendar.Internal
+module Data.Time.JapaneseCalendar.Internal.Astronomy
   ( sunEclipticLongitude
   , sunEclipticLongitudeToTime
   , nearestNewMoon
