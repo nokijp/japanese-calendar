@@ -33,14 +33,19 @@ data TempoMonthType =
   | Kannazuki  -- ^ 神無月
   | Shimotsuki  -- ^ 霜月
   | Shiwasu  -- ^ 師走
-    deriving (Show, Eq, Bounded, Enum)
+    deriving (Show, Eq, Bounded, Enum, Ord)
 
 data TempoMonth =
     CommonMonth { tempoMonthType :: TempoMonthType }
   | LeapMonth { tempoMonthType :: TempoMonthType }
     deriving (Show, Eq)
+instance Ord TempoMonth where
+  (CommonMonth a) <= (CommonMonth b) = a <= b
+  (CommonMonth a) <= (LeapMonth b) = a <= b
+  (LeapMonth a) <= (CommonMonth b) = if a == b then False else a <= b
+  (LeapMonth a) <= (LeapMonth b) = a <= b
 
-data TempoDate = TempoDate { tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq)
+data TempoDate = TempoDate { tempoYear :: Integer, tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq, Ord)
 
 japaneseNames :: [String]
 japaneseNames =
@@ -89,7 +94,10 @@ tempoDateFromGregorian :: TimeZone -> Day -> Maybe TempoDate
 tempoDateFromGregorian zone day = do
   intervals <- tempoMonthsInAYear zone day
   TempoMonthInterval month firstDay _ <- find (\(TempoMonthInterval _ firstDay lastDay) -> day >= firstDay && day <= lastDay) intervals
-  return $ TempoDate month (fromIntegral (diffDays day firstDay) + 1)
+  let (TempoMonthInterval _ shimotsukiFirst _) = head intervals
+  let (shimotsukiYear, _, _) = toGregorian shimotsukiFirst
+  let year = if month >= CommonMonth Shimotsuki then shimotsukiYear else shimotsukiYear + 1
+  return $ TempoDate year month (fromIntegral (diffDays day firstDay) + 1)
 
 tempoMonthsInAYear :: TimeZone -> Day -> Maybe [TempoMonthInterval]
 tempoMonthsInAYear zone day = singletonToMaybe (filter isLastKannazuki $ intervalCandidates seeds)
