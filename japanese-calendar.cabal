@@ -6,6 +6,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Data.Time.JapaneseCalendar
+                     , Data.Time.JapaneseCalendar.Holiday
                      , Data.Time.JapaneseCalendar.Internal.Astronomy
                      , Data.Time.JapaneseCalendar.Internal.DataUtils
                      , Data.Time.JapaneseCalendar.Rokuyo
@@ -22,7 +23,8 @@ test-suite japanese-calendar-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       Data.Time.JapaneseCalendar.Internal.AstronomySpec
+  other-modules:       Data.Time.JapaneseCalendar.HolidaySpec
+                     , Data.Time.JapaneseCalendar.Internal.AstronomySpec
                      , Data.Time.JapaneseCalendar.RokuyoSpec
                      , Data.Time.JapaneseCalendar.SolarTermSpec
                      , Data.Time.JapaneseCalendar.TempoCalendarSpec
