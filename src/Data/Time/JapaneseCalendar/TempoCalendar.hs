@@ -2,6 +2,8 @@ module Data.Time.JapaneseCalendar.TempoCalendar
   ( TempoMonthType(..)
   , TempoMonth(..)
   , TempoDate(..)
+  , monthNumber
+  , isLeapMonth
   , tempoMonthToJapaneseName
   , tempoMonthFromJapaneseName
   , nextTempoMonthType
@@ -50,6 +52,15 @@ instance Ord TempoMonth where
 -- | a date in the Tempo calendar
 data TempoDate = TempoDate { tempoYear :: Integer, tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq, Ord)
 
+-- | gets the number of the month which starts from one
+monthNumber :: TempoMonth -> Int
+monthNumber = (+ 1) . fromEnum . tempoMonthType
+
+-- | tests whether a month is a leap month
+isLeapMonth :: TempoMonth -> Bool
+isLeapMonth (CommonMonth _) = False
+isLeapMonth (LeapMonth _) = True
+
 japaneseNames :: [String]
 japaneseNames =
   [ "睦月"
@@ -75,9 +86,9 @@ tempoMonthToJapaneseName (LeapMonth monthType) = "閏" ++ japaneseNames !! fromE
 tempoMonthFromJapaneseName :: String -> Maybe TempoMonth
 tempoMonthFromJapaneseName name = toTempoMonth . toEnum <$> elemIndex ordinalName japaneseNames
   where
-    isLeapMonth = "閏" `isPrefixOf` name
-    ordinalName = if isLeapMonth then tail name else name
-    toTempoMonth = if isLeapMonth then LeapMonth else CommonMonth
+    isLeapMonthName = "閏" `isPrefixOf` name
+    ordinalName = if isLeapMonthName then tail name else name
+    toTempoMonth = if isLeapMonthName then LeapMonth else CommonMonth
 
 -- | the cyclic successor of TempoMonthType
 nextTempoMonthType :: TempoMonthType -> TempoMonthType

@@ -26,6 +26,20 @@ spec = do
     it "should be ordered correctly" $ forAll (shuffle sortedTempoDates) $ \dates ->
       sort dates == sortedTempoDates
 
+  describe "monthNumber" $ do
+    forM_
+      [ (CommonMonth Mutsuki, 1)
+      , (CommonMonth Shiwasu, 12)
+      , (LeapMonth Mutsuki, 1)
+      , (LeapMonth Shiwasu, 12)
+      ] $ \(month, number) ->
+        it ("should convert the month " ++ show month ++ " into the number " ++ show number) $
+          monthNumber month `shouldBe` number
+
+  describe "isLeapMonth" $ do
+    it "should return False when given a common month" $ isLeapMonth (CommonMonth Mutsuki) `shouldBe` False
+    it "should return True when given a leap month" $ isLeapMonth (LeapMonth Mutsuki) `shouldBe` True
+
   describe "tempoMonthToJapaneseName" $ do
     forM_
       [ (CommonMonth Mutsuki, "睦月")
