@@ -7,13 +7,14 @@ library
   hs-source-dirs:      src
   exposed-modules:     Data.Time.JapaneseCalendar
                      , Data.Time.JapaneseCalendar.Holiday
-                     , Data.Time.JapaneseCalendar.Internal.Astronomy
+                     , Data.Time.JapaneseCalendar.Internal.AstroUtils
+                     , Data.Time.JapaneseCalendar.Internal.Moon
+                     , Data.Time.JapaneseCalendar.Internal.Sun
                      , Data.Time.JapaneseCalendar.Internal.DataUtils
                      , Data.Time.JapaneseCalendar.Rokuyo
                      , Data.Time.JapaneseCalendar.SolarTerm
                      , Data.Time.JapaneseCalendar.TempoCalendar
   build-depends:       base >= 4.7 && < 5
-                     , astro == 0.4.*
                      , time == 1.6.*
                      , transformers == 0.5.*
   ghc-options:         -Wall -Werror -O
@@ -24,10 +25,13 @@ test-suite japanese-calendar-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   other-modules:       Data.Time.JapaneseCalendar.HolidaySpec
-                     , Data.Time.JapaneseCalendar.Internal.AstronomySpec
+                     , Data.Time.JapaneseCalendar.Internal.AstroUtilsSpec
+                     , Data.Time.JapaneseCalendar.Internal.MoonSpec
+                     , Data.Time.JapaneseCalendar.Internal.SunSpec
                      , Data.Time.JapaneseCalendar.RokuyoSpec
                      , Data.Time.JapaneseCalendar.SolarTermSpec
                      , Data.Time.JapaneseCalendar.TempoCalendarSpec
+                     , TestUtils
   build-depends:       base
                      , hspec == 2.*
                      , QuickCheck == 2.9.*
