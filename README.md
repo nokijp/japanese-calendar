@@ -10,7 +10,6 @@ This library contains:
 - Japanese public holidays (国民の祝日)
 
 ```haskell
-import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar
 import Data.Time.JapaneseCalendar.Holiday
@@ -20,21 +19,20 @@ import Data.Time.JapaneseCalendar.TempoCalendar
 
 main :: IO ()
 main = do
-  let tempoDate = tempoDateFromGregorian jst $ fromGregorian 2000 6 14 :: Maybe TempoDate
-  let tempoDateString = formatTempoDate <$> tempoDate
-  putStrLn $ fromMaybe "" tempoDateString  -- 2000年 皐月 13日
+  let tempoDate20010523 = tempoDate jst $ fromGregorian 2001 5 23 :: Maybe TempoDate
+  print $ formatTempoDate <$> tempoDate20010523  -- Just "2001年 閏卯月 1日"
 
-  let rokuyo = rokuyoFromTempoDate <$> tempoDate :: Maybe Rokuyo
-  let rokuyoString = rokuyoToJapaneseName <$> rokuyo
-  putStrLn $ fromMaybe "" rokuyoString  -- 大安
+  let rokuyo20000614 = rokuyo jst $ fromGregorian 2000 6 14 :: Maybe Rokuyo
+  print rokuyo20000614  -- Just Taian
+  print $ rokuyoToJapaneseName <$> rokuyo20000614  -- Just "大安"
 
-  let term = solarTerm jst $ fromGregorian 2000 3 20 :: Maybe SolarTerm
-  let termString = solarTermToJapaneseName <$> term
-  putStrLn $ fromMaybe "" termString  -- 春分
+  let solarTerm20000320 = solarTerm jst $ fromGregorian 2000 3 20 :: Maybe SolarTerm
+  print solarTerm20000320  -- Just VernalEquinox
+  print $ solarTermToJapaneseName <$> solarTerm20000320  -- Just "春分"
 
-  let holiday = holidayType $ fromGregorian 2000 11 3 :: Maybe HolidayType
-  let holidayString = holidayName <$> holiday
-  putStrLn $ fromMaybe "" holidayString  -- 文化の日
+  let holiday20001103 = holidayType $ fromGregorian 2000 11 3 :: Maybe HolidayType
+  print holiday20001103  -- Just CultureDay
+  print $ holidayName <$> holiday20001103  -- Just "文化の日"
 
 formatTempoDate :: TempoDate -> String
 formatTempoDate (TempoDate year month day) = show year ++ "年 " ++ tempoMonthToJapaneseName month ++ " " ++ show day ++ "日"
