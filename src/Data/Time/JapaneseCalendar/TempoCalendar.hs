@@ -116,11 +116,21 @@ tempoDateFromGregorian zone day = do
 tempoMonthsInAYear :: TimeZone -> Day -> Maybe [TempoMonthInterval]
 tempoMonthsInAYear zone day = singletonToMaybe (filter isLastKannazuki $ intervalCandidates seeds)
   where
-    seeds = takeWhile (\(MonthSeed _ lastDay _) -> lastDay < nextWinterSolsticeDate) $ monthSeeds zone latestWinterSolsticeDate
-    (latestWinterSolsticeDate, nextWinterSolsticeDate) = latestAndNextWinterSolsticeDate zone day
+    seeds = takeWhile (\(MonthSeed _ lastDay _) -> lastDay < nextYearWinterSolsticeDate) $ monthSeeds zone currentYearWinterSolsticeDate
+    (currentYearWinterSolsticeDate, nextYearWinterSolsticeDate) = currentAndNextYearWinterSolticeDates zone day
     isLastKannazuki = (\(TempoMonthInterval month _ _) -> tempoMonthType month == Kannazuki) . last
     singletonToMaybe [x] = Just x
     singletonToMaybe _ = Nothing
+
+currentAndNextYearWinterSolticeDates :: TimeZone -> Day -> (Day, Day)
+currentAndNextYearWinterSolticeDates zone day
+  | isShimotsuki || nearest <= day = (nearest, shiftNearest 365)
+  | otherwise = (shiftNearest (-365), nearest)
+  where
+    nearest = findNearestSolarTerm zone WinterSolstice day
+    isShimotsuki = latestNewMoonDate <= nearest && nextNewMoonDate > nearest
+    shiftNearest days = findNearestSolarTerm zone WinterSolstice $ addDays days nearest
+    latestNewMoonDate : nextNewMoonDate : _ = newMoonDatesFrom zone day
 
 intervalCandidates :: [MonthSeed] -> [[TempoMonthInterval]]
 intervalCandidates seeds = flip evalStateT Shimotsuki $ forM seeds $ \(MonthSeed firstDay lastDay centerPoints) ->
@@ -150,16 +160,6 @@ collectMonthSeeds ((firstDay, lastDay) : restIntervals) centerPoints = item : re
     rest = collectMonthSeeds restIntervals restCenterPoints
     (centerPointsInMonth, restCenterPoints) = span ((<= lastDay) . snd) centerPoints
 collectMonthSeeds [] _ = []
-
-latestAndNextWinterSolsticeDate :: TimeZone -> Day -> (Day, Day)
-latestAndNextWinterSolsticeDate zone day = latestAndNext
-  where
-    nearest = findNearestSolarTerm zone WinterSolstice day
-    shiftNearest days = findNearestSolarTerm zone WinterSolstice $ addDays days nearest
-    latestAndNext =
-      if nearest <= day
-      then (nearest, shiftNearest 365)
-      else (shiftNearest (-365), nearest)
 
 newMoonDatesFrom :: TimeZone -> Day -> [Day]
 newMoonDatesFrom zone day = utcTimeToDay <$> unfoldr (\d -> Just (d, succNewMoon d)) latest
