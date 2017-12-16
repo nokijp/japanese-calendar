@@ -3,7 +3,7 @@ module Data.Time.JapaneseCalendar.Rokuyo
   , rokuyoToJapaneseName
   , rokuyoFromJapaneseName
   , rokuyoFromTempoDate
-  , rokuyoFromGregorian
+  , rokuyo
   ) where
 
 import Data.Time.Calendar
@@ -43,6 +43,6 @@ rokuyoFromJapaneseName = enumFromName japaneseNames
 rokuyoFromTempoDate :: TempoDate -> Rokuyo
 rokuyoFromTempoDate (TempoDate _ month day) = toEnum $ (fromEnum (tempoMonthType month) + day - 1) `mod` 6
 
--- | calculates a rokuyo from a Gregorian date
-rokuyoFromGregorian :: TimeZone -> Day -> Maybe Rokuyo
-rokuyoFromGregorian zone day = rokuyoFromTempoDate <$> tempoDateFromGregorian zone day
+-- | calculates a rokuyo from a date
+rokuyo :: TimeZone -> Day -> Maybe Rokuyo
+rokuyo zone day = rokuyoFromTempoDate <$> tempoDate zone day

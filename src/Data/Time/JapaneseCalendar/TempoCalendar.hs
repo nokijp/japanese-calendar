@@ -8,7 +8,7 @@ module Data.Time.JapaneseCalendar.TempoCalendar
   , tempoMonthFromJapaneseName
   , nextTempoMonthType
   , previousTempoMonthType
-  , tempoDateFromGregorian
+  , tempoDate
   ) where
 
 import Control.Monad
@@ -103,9 +103,9 @@ previousTempoMonthType monthType = pred monthType
 data TempoMonthInterval = TempoMonthInterval { _intervalTempoMonth :: TempoMonth, _intervalFirstDay :: Day, _intervalLastDay :: Day }
 data MonthSeed = MonthSeed { _seedFirstDay :: Day, _seedLastDay :: Day, _seedCenterPoints :: [SolarTerm] }
 
--- | converts a date in the Gregorian calendar into a date in the Tempo calendar
-tempoDateFromGregorian :: TimeZone -> Day -> Maybe TempoDate
-tempoDateFromGregorian zone day = do
+-- | converts a date into a date in the Tempo calendar
+tempoDate :: TimeZone -> Day -> Maybe TempoDate
+tempoDate zone day = do
   intervals <- tempoMonthsInAYear zone day
   TempoMonthInterval month firstDay _ <- find (\(TempoMonthInterval _ firstDay lastDay) -> day >= firstDay && day <= lastDay) intervals
   let (TempoMonthInterval _ shimotsukiFirst _) = head intervals

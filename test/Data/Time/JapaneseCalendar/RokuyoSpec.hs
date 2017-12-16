@@ -23,9 +23,9 @@ spec = do
       , (Butsumetsu, "仏滅")
       , (Taian, "大安")
       , (Shakko, "赤口")
-      ] $ \(rokuyo, name) ->
-        it ("should return " ++ show name ++ " when given " ++ show rokuyo) $
-          rokuyoToJapaneseName rokuyo `shouldBe` name
+      ] $ \(value, name) ->
+        it ("should return " ++ show name ++ " when given " ++ show value) $
+          rokuyoToJapaneseName value `shouldBe` name
 
   describe "rokuyoFromJapaneseName" $ do
     forM_
@@ -66,10 +66,10 @@ spec = do
       , (TempoDate 2000 (CommonMonth Kannazuki) 1, Butsumetsu)
       , (TempoDate 2000 (CommonMonth Shimotsuki) 1, Taian)
       , (TempoDate 2000 (CommonMonth Shiwasu) 1, Shakko)
-      ] $ \(date, rokuyo) ->
-        it ("should return the rokuyo " ++ show rokuyo ++ " when given the date " ++ show date) $
-          rokuyoFromTempoDate date `shouldBe` rokuyo
+      ] $ \(date, expected) ->
+        it ("should return the rokuyo " ++ show expected ++ " when given the date " ++ show date) $
+          rokuyoFromTempoDate date `shouldBe` expected
 
-  describe "rokuyoFromGregorian" $ do
+  describe "rokuyo" $ do
     it "should run" $
-      rokuyoFromGregorian jst (fromGregorian 2000 1 1) `shouldBe` Just Taian
+      rokuyo jst (fromGregorian 2000 1 1) `shouldBe` Just Taian

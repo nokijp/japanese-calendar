@@ -84,7 +84,7 @@ spec = do
         it ("should return " ++ show current ++ " when given " ++ show prev) $
           previousTempoMonthType current `shouldBe` prev
 
-  describe "tempoDateFromGregorian" $ do
+  describe "tempoDate" $ do
     forM_
       [ (fromGregorian 2000 1 1, TempoDate 1999 (CommonMonth Shimotsuki) 25)
       , (fromGregorian 2000 1 2, TempoDate 1999 (CommonMonth Shimotsuki) 26)
@@ -98,15 +98,15 @@ spec = do
       , (fromGregorian 2010 1 1, TempoDate 2009 (CommonMonth Shimotsuki) 17)
       ] $ \(gregorian, tempo) ->
         it ("should convert the Gregorian date " ++ show gregorian ++ " into the Tempo date " ++ show tempo) $
-          tempoDateFromGregorian jst gregorian `shouldBe` Just tempo
+          tempoDate jst gregorian `shouldBe` Just tempo
     forM_
       ([2000..2032] ++ [2035..2100]) $ \(year) ->
         it ("should be defined in " ++ show year) $
-          tempoDateFromGregorian jst (fromGregorian year 5 1) `shouldSatisfy` isJust
+          tempoDate jst (fromGregorian year 5 1) `shouldSatisfy` isJust
     forM_
       [2033, 2034] $ \(year) ->
         it ("should be indefinable in " ++ show year) $
-          tempoDateFromGregorian jst (fromGregorian year 5 1) `shouldBe` Nothing
+          tempoDate jst (fromGregorian year 5 1) `shouldBe` Nothing
 
 sortedTempoMonths :: [TempoMonth]
 sortedTempoMonths =
