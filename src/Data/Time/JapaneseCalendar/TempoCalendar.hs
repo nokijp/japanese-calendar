@@ -18,7 +18,7 @@ import Data.List
 import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Clock
-import Data.Time.JapaneseCalendar.Internal.Astronomy
+import Data.Time.JapaneseCalendar.Internal.Moon
 import Data.Time.JapaneseCalendar.SolarTerm
 import Data.Time.LocalTime
 
@@ -170,8 +170,8 @@ newMoonDatesFrom zone day = utcTimeToDay <$> unfoldr (\d -> Just (d, succNewMoon
     latest =
       if nearest <= addUTCDays 1 utcStartTime
       then nearest
-      else nearestNewMoon $ addUTCDays (-averageNewMoonCycle) nearest
-    succNewMoon = nearestNewMoon . addUTCDays averageNewMoonCycle
+      else nearestNewMoon $ addUTCDays (-averageMoonPhaseCycle) nearest
+    succNewMoon = nearestNewMoon . addUTCDays averageMoonPhaseCycle
     utcTimeToDay utcTime = localDay $ utcToLocalTime zone utcTime
 
 centerPointsFrom :: TimeZone -> Day -> [(SolarTerm, Day)]

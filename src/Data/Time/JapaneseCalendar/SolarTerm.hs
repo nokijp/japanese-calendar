@@ -11,7 +11,7 @@ module Data.Time.JapaneseCalendar.SolarTerm
   ) where
 
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar.Internal.Astronomy
+import Data.Time.JapaneseCalendar.Internal.Sun
 import Data.Time.JapaneseCalendar.Internal.DataUtils
 import Data.Time.LocalTime
 
