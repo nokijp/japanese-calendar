@@ -1,6 +1,10 @@
 # Japanese Calendar
 
+[![Build Status](https://travis-ci.org/nokijp/japanese-calendar.svg?branch=master)](https://travis-ci.org/nokijp/japanese-calendar)
+
 This is a library for Haskell that provides functions to deal with the Japanese calendar.
+
+[The haddocks are available here.](https://nokijp.github.io/japanese-calendar/)
 
 This library contains:
 
