@@ -27,7 +27,7 @@ spec = do
       , (fromGregorian 2000 4 4, ClearAndBright)
       , (fromGregorian 2001 3 5, AwakeningOfInsects)
       ] $ \(day, term) ->
-        it ("should return the solar term " ++ show term ++ " when given the day " ++ show day) $
+        it ("should return a solar term " ++ show term ++ " when given a day " ++ show day) $
           solarTerm jst day `shouldBe` Just term
     forM_
       [ fromGregorian 2000 3 19
@@ -37,7 +37,7 @@ spec = do
       , fromGregorian 2001 3 4
       , fromGregorian 2001 3 6
       ] $ \day ->
-        it ("should return Nothing when given the day " ++ show day ++ " which is not a start day of a solar term") $
+        it ("should return Nothing when given a day " ++ show day ++ " which is not a start day of a solar term") $
           solarTerm jst day `shouldBe` Nothing
 
   describe "nearestSolarTerm" $ do
@@ -55,7 +55,7 @@ spec = do
       , (fromGregorian 2010 3 21, VernalEquinox, fromGregorian 2010 3 21)
       , (fromGregorian 2010 3 22, VernalEquinox, fromGregorian 2010 3 21)
       ] $ \(day, term, termDay) ->
-        it ("should return the nearest solar term " ++ show term ++ " and its date " ++ show termDay ++ " when given the day " ++ show day) $
+        it ("should return the nearest solar term " ++ show term ++ " and its date " ++ show termDay ++ " when given a day " ++ show day) $
           nearestSolarTerm jst day `shouldBe` (term, termDay)
 
   describe "solarTermsFrom" $ do
@@ -74,5 +74,5 @@ spec = do
       , (fromGregorian 2000 4 4, VernalEquinox, fromGregorian 2000 3 20)
       , (fromGregorian 2000 3 20, ClearAndBright, fromGregorian 2000 4 4)
       ] $ \(day, term, termDay) ->
-        it ("should return the date " ++ show termDay ++ " which is the start day of " ++ show term ++ " and the nearest from " ++ show day) $
+        it ("should return a date " ++ show termDay ++ " which is a start day of " ++ show term ++ " and the nearest from " ++ show day) $
           findNearestSolarTerm jst term day `shouldBe` termDay

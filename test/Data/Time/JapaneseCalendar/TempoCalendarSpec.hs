@@ -33,7 +33,7 @@ spec = do
       , (LeapMonth Mutsuki, 1)
       , (LeapMonth Shiwasu, 12)
       ] $ \(month, number) ->
-        it ("should convert the month " ++ show month ++ " into the number " ++ show number) $
+        it ("should convert a month " ++ show month ++ " into a number " ++ show number) $
           monthNumber month `shouldBe` number
 
   describe "isLeapMonth" $ do
@@ -47,7 +47,7 @@ spec = do
       , (LeapMonth Mutsuki, "閏睦月")
       , (LeapMonth Shiwasu, "閏師走")
       ] $ \(month, name) ->
-        it ("should convert the month " ++ show month ++ " into the name " ++ show name) $
+        it ("should convert a month " ++ show month ++ " into a name " ++ show name) $
           tempoMonthToJapaneseName month `shouldBe` name
 
   describe "tempoMonthFromJapaneseName" $ do
@@ -57,7 +57,7 @@ spec = do
       , (LeapMonth Mutsuki, "閏睦月")
       , (LeapMonth Shiwasu, "閏師走")
       ] $ \(month, name) ->
-        it ("should convert the name " ++ show name ++ " into the month " ++ show month) $
+        it ("should convert a name " ++ show name ++ " into a month " ++ show month) $
           tempoMonthFromJapaneseName name `shouldBe` Just month
     forM_
       [ ("")
@@ -65,7 +65,7 @@ spec = do
       , ("閏")
       , ("閏abc")
       ] $ \(name) ->
-        it ("should return Nothing when given the invalid name " ++ show name) $
+        it ("should return Nothing when given an invalid name " ++ show name) $
           tempoMonthFromJapaneseName name `shouldBe` Nothing
 
   describe "nextTempoMonthType" $ do
@@ -97,7 +97,7 @@ spec = do
       , (fromGregorian 2001 6 21, TempoDate 2001 (CommonMonth Satsuki) 1)
       , (fromGregorian 2010 1 1, TempoDate 2009 (CommonMonth Shimotsuki) 17)
       ] $ \(gregorian, tempo) ->
-        it ("should convert the Gregorian date " ++ show gregorian ++ " into the Tempo date " ++ show tempo) $
+        it ("should convert a Gregorian date " ++ show gregorian ++ " into a Tempo date " ++ show tempo) $
           tempoDate jst gregorian `shouldBe` Just tempo
     forM_
       ([2000..2032] ++ [2035..2100]) $ \(year) ->

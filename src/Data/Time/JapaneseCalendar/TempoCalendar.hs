@@ -52,7 +52,7 @@ instance Ord TempoMonth where
 -- | a date in the Tempo calendar
 data TempoDate = TempoDate { tempoYear :: Integer, tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq, Ord)
 
--- | gets the number of the month which starts from one
+-- | gets a number of a month which starts from one
 monthNumber :: TempoMonth -> Int
 monthNumber = (+ 1) . fromEnum . tempoMonthType
 
@@ -90,12 +90,12 @@ tempoMonthFromJapaneseName name = toTempoMonth . toEnum <$> elemIndex ordinalNam
     ordinalName = if isLeapMonthName then tail name else name
     toTempoMonth = if isLeapMonthName then LeapMonth else CommonMonth
 
--- | the cyclic successor of TempoMonthType
+-- | a cyclic successor of TempoMonthType
 nextTempoMonthType :: TempoMonthType -> TempoMonthType
 nextTempoMonthType Shiwasu = Mutsuki
 nextTempoMonthType monthType = succ monthType
 
--- | the cyclic predecessor of TempoMonthType
+-- | a cyclic predecessor of TempoMonthType
 previousTempoMonthType :: TempoMonthType -> TempoMonthType
 previousTempoMonthType Mutsuki = Shiwasu
 previousTempoMonthType monthType = pred monthType

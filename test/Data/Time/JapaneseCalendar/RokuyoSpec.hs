@@ -67,7 +67,7 @@ spec = do
       , (TempoDate 2000 (CommonMonth Shimotsuki) 1, Taian)
       , (TempoDate 2000 (CommonMonth Shiwasu) 1, Shakko)
       ] $ \(date, expected) ->
-        it ("should return the rokuyo " ++ show expected ++ " when given the date " ++ show date) $
+        it ("should return a rokuyo " ++ show expected ++ " when given a date " ++ show date) $
           rokuyoFromTempoDate date `shouldBe` expected
 
   describe "rokuyo" $ do

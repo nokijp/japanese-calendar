@@ -55,7 +55,7 @@ spec = do
       , (2003, 12, KinotoOx)
       , (2004, 11, HinoeRat)
       ] $ \(year, month, stemBranch) ->
-        it ("should return " ++ show stemBranch ++ " when given the year" ++ show year ++ " and the month " ++ show month) $
+        it ("should return " ++ show stemBranch ++ " when given a year" ++ show year ++ " and a month " ++ show month) $
           monthStemBranch year month `shouldBe` stemBranch
 
   describe "dayStemBranch" $ do

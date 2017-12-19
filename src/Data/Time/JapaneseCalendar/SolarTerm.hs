@@ -79,11 +79,11 @@ solarTermToJapaneseName = enumToName japaneseNames
 solarTermFromJapaneseName :: String -> Maybe SolarTerm
 solarTermFromJapaneseName = enumFromName japaneseNames
 
--- | tests whether the solar term is a segment point, sekki
+-- | tests whether a solar term is a segment point, sekki
 isSegmentPoint :: SolarTerm -> Bool
 isSegmentPoint term = fromEnum term `mod` 2 == 1
 
--- | tests whether the solar term is a center point, chuki
+-- | tests whether a solar term is a center point, chuki
 isCenterPoint :: SolarTerm -> Bool
 isCenterPoint = not . isSegmentPoint
 

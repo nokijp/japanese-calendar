@@ -55,7 +55,7 @@ holidayName TheEmperorsBirthday = "天皇誕生日"
 holidayName TransferHoliday = "振替休日"
 holidayName CitizensHoliday = "国民の休日"
 
--- | returns the holiday type of the specifed day
+-- | returns a holiday type of a specified day
 holidayType :: Day -> Maybe HolidayType
 holidayType day
   | day >= fromGregorian 2016 1 1 = holiday2016 day
