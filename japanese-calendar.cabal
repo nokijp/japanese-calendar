@@ -13,6 +13,7 @@ library
                      , Data.Time.JapaneseCalendar.Internal.DataUtils
                      , Data.Time.JapaneseCalendar.Rokuyo
                      , Data.Time.JapaneseCalendar.SolarTerm
+                     , Data.Time.JapaneseCalendar.StemBranch
                      , Data.Time.JapaneseCalendar.TempoCalendar
   build-depends:       base >= 4.7 && < 5
                      , time == 1.6.*
@@ -30,6 +31,7 @@ test-suite japanese-calendar-test
                      , Data.Time.JapaneseCalendar.Internal.SunSpec
                      , Data.Time.JapaneseCalendar.RokuyoSpec
                      , Data.Time.JapaneseCalendar.SolarTermSpec
+                     , Data.Time.JapaneseCalendar.StemBranchSpec
                      , Data.Time.JapaneseCalendar.TempoCalendarSpec
                      , TestUtils
   build-depends:       base
