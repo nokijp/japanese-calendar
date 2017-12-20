@@ -6,6 +6,7 @@ module Data.Time.JapaneseCalendar.SolarTermSpec
 import Control.Monad
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.SolarTerm
 import Test.Hspec
 import Test.QuickCheck.Arbitrary
@@ -16,10 +17,10 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-  describe "solarTermFromJapaneseName" $ do
-    it "is a retraction of solarTermToJapaneseName" $ forAll arbitraryBoundedEnum $ \term ->
-      solarTermFromJapaneseName (solarTermToJapaneseName term) == Just term
-    it "should return Nothing when given an invalid name" $ solarTermFromJapaneseName "xxx" `shouldBe` Nothing
+  describe "fromJapaneseName" $ do
+    it "is a retraction of toJapaneseName" $ forAll arbitraryBoundedEnum $ \term ->
+      fromJapaneseName (toJapaneseName (term :: SolarTerm)) == Just term
+    it "should return Nothing when given an invalid name" $ (fromJapaneseName "xxx" :: Maybe SolarTerm) `shouldBe` Nothing
 
   describe "solarTerm" $ do
     forM_

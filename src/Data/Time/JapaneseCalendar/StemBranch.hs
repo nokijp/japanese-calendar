@@ -1,15 +1,11 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Time.JapaneseCalendar.StemBranch
   ( StemBranch(..)
   , Stem(..)
   , Branch(..)
-  , stemBranchToJapaneseName
-  , stemBranchFromJapaneseName
   , stemBranchToStemAndBranch
   , stemBranchFromStemAndBranch
-  , stemToJapaneseName
-  , stemFromJapaneseName
-  , branchToJapaneseName
-  , branchFromJapaneseName
   , yearStemBranch
   , monthStemBranch
   , dayStemBranch
@@ -17,7 +13,41 @@ module Data.Time.JapaneseCalendar.StemBranch
 
 import Control.Monad
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar.Internal.DataUtils
+import Data.Time.JapaneseCalendar.JapaneseName
+
+-- | the ten heavenly stems, 十干
+data Stem =
+    Kinoe  -- ^ 甲
+  | Kinoto  -- ^ 乙
+  | Hinoe  -- ^ 丙
+  | Hinoto  -- ^ 丁
+  | Tsuchinoe  -- ^ 戊
+  | Tsuchinoto  -- ^ 己
+  | Kanoe  -- ^ 庚
+  | Kanoto  -- ^ 辛
+  | Mizunoe  -- ^ 壬
+  | Mizunoto  -- ^ 癸
+    deriving (Show, Eq, Bounded, Enum)
+
+derivingJapaneseNameBoundedEnum ''Stem ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+
+-- | the twelve earthly branches, 十二支
+data Branch =
+    Rat  -- ^ 子
+  | Ox  -- ^ 丑
+  | Tiger  -- ^ 寅
+  | Rabbit  -- ^ 卯
+  | Dragon  -- ^ 辰
+  | Snake  -- ^ 巳
+  | Horse  -- ^ 午
+  | Goat  -- ^ 未
+  | Monkey  -- ^ 申
+  | Rooster  -- ^ 酉
+  | Dog  -- ^ 戌
+  | Pig  -- ^ 亥
+    deriving (Show, Eq, Bounded, Enum)
+
+derivingJapaneseNameBoundedEnum ''Branch ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
 
 -- | the stems and branches, 干支
 data StemBranch =
@@ -83,15 +113,11 @@ data StemBranch =
   | MizunotoPig  -- ^ 癸亥
     deriving (Show, Eq, Bounded, Enum)
 
--- | returns a Japanese name of a stem-branch
-stemBranchToJapaneseName :: StemBranch -> String
-stemBranchToJapaneseName = (\(s, b) -> stemToJapaneseName s ++ branchToJapaneseName b) . stemBranchToStemAndBranch
-
--- | converts a Japanese name of a stem-branch into a StemBranch
-stemBranchFromJapaneseName :: String -> Maybe StemBranch
-stemBranchFromJapaneseName [stemName, branchName] =
-  join $ stemBranchFromStemAndBranch <$> stemFromJapaneseName [stemName] <*> branchFromJapaneseName [branchName]
-stemBranchFromJapaneseName _ = Nothing
+instance JapaneseName StemBranch where
+  toJapaneseName = (\(s, b) -> toJapaneseName s ++ toJapaneseName b) . stemBranchToStemAndBranch
+  fromJapaneseName [stemName, branchName] =
+    join $ stemBranchFromStemAndBranch <$> fromJapaneseName [stemName] <*> fromJapaneseName [branchName]
+  fromJapaneseName _ = Nothing
 
 -- | extracts a stem and a branch from a stem-branch
 stemBranchToStemAndBranch :: StemBranch -> (Stem, Branch)
@@ -105,58 +131,6 @@ stemBranchFromStemAndBranch stem branch = if even diff then Just (toEnum stemBra
     branchIndex = fromEnum branch
     stemBranchIndex = diff * 5 + stemIndex
     diff = (stemIndex - branchIndex) `mod` 12
-
--- | the ten heavenly stems, 十干
-data Stem =
-    Kinoe  -- ^ 甲
-  | Kinoto  -- ^ 乙
-  | Hinoe  -- ^ 丙
-  | Hinoto  -- ^ 丁
-  | Tsuchinoe  -- ^ 戊
-  | Tsuchinoto  -- ^ 己
-  | Kanoe  -- ^ 庚
-  | Kanoto  -- ^ 辛
-  | Mizunoe  -- ^ 壬
-  | Mizunoto  -- ^ 癸
-    deriving (Show, Eq, Bounded, Enum)
-
-japaneseStemNames :: [String]
-japaneseStemNames = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
-
--- | returns a Japanese name of a stem
-stemToJapaneseName :: Stem -> String
-stemToJapaneseName = enumToName japaneseStemNames
-
--- | converts a Japanese name of a stem into a Stem
-stemFromJapaneseName :: String -> Maybe Stem
-stemFromJapaneseName = enumFromName japaneseStemNames
-
--- | the twelve earthly branches, 十二支
-data Branch =
-    Rat  -- ^ 子
-  | Ox  -- ^ 丑
-  | Tiger  -- ^ 寅
-  | Rabbit  -- ^ 卯
-  | Dragon  -- ^ 辰
-  | Snake  -- ^ 巳
-  | Horse  -- ^ 午
-  | Goat  -- ^ 未
-  | Monkey  -- ^ 申
-  | Rooster  -- ^ 酉
-  | Dog  -- ^ 戌
-  | Pig  -- ^ 亥
-    deriving (Show, Eq, Bounded, Enum)
-
-japaneseBranchNames :: [String]
-japaneseBranchNames = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
-
--- | returns a Japanese name of a branch
-branchToJapaneseName :: Branch -> String
-branchToJapaneseName = enumToName japaneseBranchNames
-
--- | converts a Japanese name of a branch into a Branch
-branchFromJapaneseName :: String -> Maybe Branch
-branchFromJapaneseName = enumFromName japaneseBranchNames
 
 -- | returns a stem-branch of a specified year
 yearStemBranch :: Integer -> StemBranch

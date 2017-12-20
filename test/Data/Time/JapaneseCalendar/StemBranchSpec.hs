@@ -5,14 +5,22 @@ module Data.Time.JapaneseCalendar.StemBranchSpec
 
 import Control.Monad
 import Data.Time.Calendar
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.StemBranch
 import Test.Hspec
+import Test.QuickCheck.Arbitrary
+import Test.QuickCheck.Property
 
 main :: IO ()
 main = hspec spec
 
 spec :: Spec
 spec = do
+  describe "fromJapaneseName" $ do
+    it "is a retraction of toJapaneseName" $ forAll arbitraryBoundedEnum $ \stemBranch ->
+      fromJapaneseName (toJapaneseName (stemBranch :: StemBranch)) == Just stemBranch
+    it "should return Nothing when given an invalid name" $ (fromJapaneseName "xxx" :: Maybe StemBranch) `shouldBe` Nothing
+
   describe "stemBranchToStemAndBranch" $ do
     forM_
       [ (KinoeRat, Kinoe, Rat)

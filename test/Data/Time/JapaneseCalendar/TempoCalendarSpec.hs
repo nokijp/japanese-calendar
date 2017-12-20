@@ -8,6 +8,7 @@ import Data.List
 import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.TempoCalendar
 import Test.Hspec
 import Test.QuickCheck.Gen
@@ -40,7 +41,7 @@ spec = do
     it "should return False when given a common month" $ isLeapMonth (CommonMonth Mutsuki) `shouldBe` False
     it "should return True when given a leap month" $ isLeapMonth (LeapMonth Mutsuki) `shouldBe` True
 
-  describe "tempoMonthToJapaneseName" $ do
+  describe "toJapaneseName" $ do
     forM_
       [ (CommonMonth Mutsuki, "睦月")
       , (CommonMonth Shiwasu, "師走")
@@ -48,9 +49,9 @@ spec = do
       , (LeapMonth Shiwasu, "閏師走")
       ] $ \(month, name) ->
         it ("should convert a month " ++ show month ++ " into a name " ++ show name) $
-          tempoMonthToJapaneseName month `shouldBe` name
+          toJapaneseName month `shouldBe` name
 
-  describe "tempoMonthFromJapaneseName" $ do
+  describe "fromJapaneseName" $ do
     forM_
       [ (CommonMonth Mutsuki, "睦月")
       , (CommonMonth Shiwasu, "師走")
@@ -58,7 +59,7 @@ spec = do
       , (LeapMonth Shiwasu, "閏師走")
       ] $ \(month, name) ->
         it ("should convert a name " ++ show name ++ " into a month " ++ show month) $
-          tempoMonthFromJapaneseName name `shouldBe` Just month
+          fromJapaneseName name `shouldBe` Just month
     forM_
       [ ("")
       , ("abc")
@@ -66,7 +67,7 @@ spec = do
       , ("閏abc")
       ] $ \(name) ->
         it ("should return Nothing when given an invalid name " ++ show name) $
-          tempoMonthFromJapaneseName name `shouldBe` Nothing
+          (fromJapaneseName name :: Maybe TempoMonth) `shouldBe` Nothing
 
   describe "nextTempoMonthType" $ do
     forM_

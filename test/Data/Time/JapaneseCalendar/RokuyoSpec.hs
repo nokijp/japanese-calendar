@@ -6,6 +6,7 @@ module Data.Time.JapaneseCalendar.RokuyoSpec
 import Control.Monad
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.Rokuyo
 import Data.Time.JapaneseCalendar.TempoCalendar
 import Test.Hspec
@@ -15,7 +16,7 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-  describe "rokuyoToJapaneseName" $ do
+  describe "toJapaneseName" $ do
     forM_
       [ (Sensho, "先勝")
       , (Tomobiki, "友引")
@@ -25,9 +26,9 @@ spec = do
       , (Shakko, "赤口")
       ] $ \(value, name) ->
         it ("should return " ++ show name ++ " when given " ++ show value) $
-          rokuyoToJapaneseName value `shouldBe` name
+          toJapaneseName value `shouldBe` name
 
-  describe "rokuyoFromJapaneseName" $ do
+  describe "fromJapaneseName" $ do
     forM_
       [ ("先勝", Just Sensho)
       , ("友引", Just Tomobiki)
@@ -39,7 +40,7 @@ spec = do
       , ("abc", Nothing)
       ] $ \(name, rokuyoMaybe) ->
         it ("should return " ++ show rokuyoMaybe ++ " when given " ++ show name) $
-          rokuyoFromJapaneseName name `shouldBe` rokuyoMaybe
+          fromJapaneseName name `shouldBe` rokuyoMaybe
 
   describe "rokuyoFromTempoDate" $ do
     forM_

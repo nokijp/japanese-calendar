@@ -1,13 +1,13 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Time.JapaneseCalendar.Rokuyo
   ( Rokuyo(..)
-  , rokuyoToJapaneseName
-  , rokuyoFromJapaneseName
   , rokuyoFromTempoDate
   , rokuyo
   ) where
 
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar.Internal.DataUtils
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.TempoCalendar
 import Data.Time.LocalTime
 
@@ -21,23 +21,7 @@ data Rokuyo =
   | Shakko  -- ^ 赤口
     deriving (Show, Eq, Enum, Bounded)
 
-japaneseNames :: [String]
-japaneseNames =
-  [ "先勝"
-  , "友引"
-  , "先負"
-  , "仏滅"
-  , "大安"
-  , "赤口"
-  ]
-
--- | returns a Japanese name of a rokuyo
-rokuyoToJapaneseName :: Rokuyo -> String
-rokuyoToJapaneseName = enumToName japaneseNames
-
--- | converts a Japanese name of a rokuyo into a SolarTerm
-rokuyoFromJapaneseName :: String -> Maybe Rokuyo
-rokuyoFromJapaneseName = enumFromName japaneseNames
+derivingJapaneseNameBoundedEnum ''Rokuyo ["先勝", "友引", "先負", "仏滅", "大安", "赤口"]
 
 -- | calculates a rokuyo from a Tempo date
 rokuyoFromTempoDate :: TempoDate -> Rokuyo

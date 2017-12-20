@@ -10,12 +10,13 @@ library
                      , Data.Time.JapaneseCalendar.Internal.AstroUtils
                      , Data.Time.JapaneseCalendar.Internal.Moon
                      , Data.Time.JapaneseCalendar.Internal.Sun
-                     , Data.Time.JapaneseCalendar.Internal.DataUtils
+                     , Data.Time.JapaneseCalendar.JapaneseName
                      , Data.Time.JapaneseCalendar.Rokuyo
                      , Data.Time.JapaneseCalendar.SolarTerm
                      , Data.Time.JapaneseCalendar.StemBranch
                      , Data.Time.JapaneseCalendar.TempoCalendar
   build-depends:       base >= 4.7 && < 5
+                     , template-haskell == 2.11.*
                      , time == 1.6.*
                      , transformers == 0.5.*
   ghc-options:         -Wall -Werror -O

@@ -1,7 +1,7 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Time.JapaneseCalendar.SolarTerm
   ( SolarTerm(..)
-  , solarTermToJapaneseName
-  , solarTermFromJapaneseName
   , isSegmentPoint
   , isCenterPoint
   , solarTerm
@@ -12,7 +12,7 @@ module Data.Time.JapaneseCalendar.SolarTerm
 
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar.Internal.Sun
-import Data.Time.JapaneseCalendar.Internal.DataUtils
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.LocalTime
 
 -- | the twenty-four solar terms
@@ -43,8 +43,7 @@ data SolarTerm =
   | AwakeningOfInsects  -- ^ 啓蟄
     deriving (Show, Eq, Bounded, Enum)
 
-japaneseNames :: [String]
-japaneseNames =
+derivingJapaneseNameBoundedEnum ''SolarTerm
   [ "春分"
   , "清明"
   , "穀雨"
@@ -70,14 +69,6 @@ japaneseNames =
   , "雨水"
   , "啓蟄"
   ]
-
--- | returns a Japanese name of a solar term
-solarTermToJapaneseName :: SolarTerm -> String
-solarTermToJapaneseName = enumToName japaneseNames
-
--- | converts a Japanese name of a solar term into a SolarTerm
-solarTermFromJapaneseName :: String -> Maybe SolarTerm
-solarTermFromJapaneseName = enumFromName japaneseNames
 
 -- | tests whether a solar term is a segment point, sekki
 isSegmentPoint :: SolarTerm -> Bool

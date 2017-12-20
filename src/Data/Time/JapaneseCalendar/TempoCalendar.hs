@@ -1,11 +1,11 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Time.JapaneseCalendar.TempoCalendar
   ( TempoMonthType(..)
   , TempoMonth(..)
   , TempoDate(..)
   , monthNumber
   , isLeapMonth
-  , tempoMonthToJapaneseName
-  , tempoMonthFromJapaneseName
   , nextTempoMonthType
   , previousTempoMonthType
   , tempoDate
@@ -19,6 +19,7 @@ import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Clock
 import Data.Time.JapaneseCalendar.Internal.Moon
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.SolarTerm
 import Data.Time.LocalTime
 
@@ -38,16 +39,29 @@ data TempoMonthType =
   | Shiwasu  -- ^ 師走
     deriving (Show, Eq, Bounded, Enum, Ord)
 
+derivingJapaneseNameBoundedEnum ''TempoMonthType
+  ["睦月", "如月", "弥生", "卯月", "皐月", "水無月", "文月", "葉月", "長月", "神無月", "霜月", "師走"]
+
 -- | a month in the Tempo calendar
 data TempoMonth =
     CommonMonth { tempoMonthType :: TempoMonthType }
   | LeapMonth { tempoMonthType :: TempoMonthType }
     deriving (Show, Eq)
+
 instance Ord TempoMonth where
   (CommonMonth a) <= (CommonMonth b) = a <= b
   (CommonMonth a) <= (LeapMonth b) = a <= b
   (LeapMonth a) <= (CommonMonth b) = a /= b && a <= b
   (LeapMonth a) <= (LeapMonth b) = a <= b
+
+instance JapaneseName TempoMonth where
+  toJapaneseName (CommonMonth monthType) = toJapaneseName monthType
+  toJapaneseName (LeapMonth monthType) = "閏" ++ toJapaneseName monthType
+  fromJapaneseName name = toTempoMonth <$> fromJapaneseName ordinalName
+    where
+      isLeapMonthName = "閏" `isPrefixOf` name
+      ordinalName = if isLeapMonthName then tail name else name
+      toTempoMonth = if isLeapMonthName then LeapMonth else CommonMonth
 
 -- | a date in the Tempo calendar
 data TempoDate = TempoDate { tempoYear :: Integer, tempoMonth :: TempoMonth, tempoDay :: Int } deriving (Show, Eq, Ord)
@@ -60,35 +74,6 @@ monthNumber = (+ 1) . fromEnum . tempoMonthType
 isLeapMonth :: TempoMonth -> Bool
 isLeapMonth (CommonMonth _) = False
 isLeapMonth (LeapMonth _) = True
-
-japaneseNames :: [String]
-japaneseNames =
-  [ "睦月"
-  , "如月"
-  , "弥生"
-  , "卯月"
-  , "皐月"
-  , "水無月"
-  , "文月"
-  , "葉月"
-  , "長月"
-  , "神無月"
-  , "霜月"
-  , "師走"
-  ]
-
--- | returns a Japanese name of a month in the Tempo calendar
-tempoMonthToJapaneseName :: TempoMonth -> String
-tempoMonthToJapaneseName (CommonMonth monthType) = japaneseNames !! fromEnum monthType
-tempoMonthToJapaneseName (LeapMonth monthType) = "閏" ++ japaneseNames !! fromEnum monthType
-
--- | converts a Japanese name of a month in the Tempo calendar into a TempoMonth
-tempoMonthFromJapaneseName :: String -> Maybe TempoMonth
-tempoMonthFromJapaneseName name = toTempoMonth . toEnum <$> elemIndex ordinalName japaneseNames
-  where
-    isLeapMonthName = "閏" `isPrefixOf` name
-    ordinalName = if isLeapMonthName then tail name else name
-    toTempoMonth = if isLeapMonthName then LeapMonth else CommonMonth
 
 -- | a cyclic successor of TempoMonthType
 nextTempoMonthType :: TempoMonthType -> TempoMonthType

@@ -1,6 +1,7 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Time.JapaneseCalendar.Holiday
   ( HolidayType(..)
-  , holidayName
   , holidayType
   ) where
 
@@ -10,6 +11,7 @@ import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Calendar.WeekDate
 import Data.Time.JapaneseCalendar
+import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.SolarTerm
 
 -- | Japanese holidays
@@ -34,26 +36,26 @@ data HolidayType =
   | CitizensHoliday  -- ^ 国民の休日
     deriving (Show, Eq)
 
--- | returns a name of a holiday type
-holidayName :: HolidayType -> String
-holidayName NewYearsDay = "元日"
-holidayName ComingOfAgeDay = "成人の日"
-holidayName FoundationDay = "建国記念の日"
-holidayName VernalEquinoxDay = "春分の日"
-holidayName ShowaDay = "昭和の日"
-holidayName ConstitutionMemorialDay = "憲法記念日"
-holidayName GreeneryDay = "みどりの日"
-holidayName ChildrensDay = "こどもの日"
-holidayName MarineDay = "海の日"
-holidayName MountainDay = "山の日"
-holidayName RespectForTheAgedDay = "敬老の日"
-holidayName AutumnalEquinoxDay = "秋分の日"
-holidayName HealthAndSportsDay = "体育の日"
-holidayName CultureDay = "文化の日"
-holidayName LabourThanksgivingDay = "勤労感謝の日"
-holidayName TheEmperorsBirthday = "天皇誕生日"
-holidayName TransferHoliday = "振替休日"
-holidayName CitizensHoliday = "国民の休日"
+derivingJapaneseNameBoundedEnum ''HolidayType
+  [ "元日"
+  , "成人の日"
+  , "建国記念の日"
+  , "春分の日"
+  , "昭和の日"
+  , "憲法記念日"
+  , "みどりの日"
+  , "こどもの日"
+  , "海の日"
+  , "山の日"
+  , "敬老の日"
+  , "秋分の日"
+  , "体育の日"
+  , "文化の日"
+  , "勤労感謝の日"
+  , "天皇誕生日"
+  , "振替休日"
+  , "国民の休日"
+  ]
 
 -- | returns a holiday type of a specified day
 holidayType :: Day -> Maybe HolidayType
