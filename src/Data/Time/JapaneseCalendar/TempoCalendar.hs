@@ -39,7 +39,7 @@ data TempoMonthType =
   | Shiwasu  -- ^ 師走
     deriving (Show, Eq, Bounded, Enum, Ord)
 
-derivingJapaneseNameBoundedEnum ''TempoMonthType
+derivingJapaneseName ''TempoMonthType
   ["睦月", "如月", "弥生", "卯月", "皐月", "水無月", "文月", "葉月", "長月", "神無月", "霜月", "師走"]
 
 -- | a month in the Tempo calendar

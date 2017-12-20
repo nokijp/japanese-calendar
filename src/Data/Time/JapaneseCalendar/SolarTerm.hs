@@ -43,7 +43,7 @@ data SolarTerm =
   | AwakeningOfInsects  -- ^ 啓蟄
     deriving (Show, Eq, Bounded, Enum)
 
-derivingJapaneseNameBoundedEnum ''SolarTerm
+derivingJapaneseName ''SolarTerm
   [ "春分"
   , "清明"
   , "穀雨"

@@ -36,7 +36,7 @@ data HolidayType =
   | CitizensHoliday  -- ^ 国民の休日
     deriving (Show, Eq)
 
-derivingJapaneseNameBoundedEnum ''HolidayType
+derivingJapaneseName ''HolidayType
   [ "元日"
   , "成人の日"
   , "建国記念の日"
