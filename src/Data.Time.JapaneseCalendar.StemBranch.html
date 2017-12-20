@@ -29,7 +29,7 @@
 </span><a name="line-29"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Mizunoto"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Mizunoto"><span class="hs-identifier">Mizunoto</span></a></a><span>  </span><span class="hs-comment">-- ^ &#30328;</span><span>
 </span><a name="line-30"></a><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Show</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Eq</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Bounded</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Enum</span><span class="hs-special">)</span><span>
 </span><a name="line-31"></a><span>
-</span><a name="line-32"></a><span class="hs-identifier hs-var">derivingJapaneseNameBoundedEnum</span><span> </span><span class="hs-char">''Stem [&quot;&#30002;&quot;, &quot;&#20057;&quot;, &quot;&#19993;&quot;, &quot;&#19969;&quot;, &quot;&#25098;&quot;, &quot;&#24049;&quot;, &quot;&#24218;&quot;, &quot;&#36763;&quot;, &quot;&#22764;&quot;, &quot;&#30328;&quot;]
+</span><a name="line-32"></a><span class="hs-identifier hs-var">derivingJapaneseName</span><span> </span><span class="hs-char">''Stem [&quot;&#30002;&quot;, &quot;&#20057;&quot;, &quot;&#19993;&quot;, &quot;&#19969;&quot;, &quot;&#25098;&quot;, &quot;&#24049;&quot;, &quot;&#24218;&quot;, &quot;&#36763;&quot;, &quot;&#22764;&quot;, &quot;&#30328;&quot;]
 
 -- | the twelve earthly branches, &#21313;&#20108;&#25903;
 data Branch =
@@ -47,7 +47,7 @@ data Branch =
   | Pig  -- ^ &#20133;
     deriving (Show, Eq, Bounded, Enum)
 
-derivingJapaneseNameBoundedEnum ''Branch [&quot;&#23376;&quot;, &quot;&#19985;&quot;, &quot;&#23493;&quot;, &quot;&#21359;&quot;, &quot;&#36784;&quot;, &quot;&#24051;&quot;, &quot;&#21320;&quot;, &quot;&#26410;&quot;, &quot;&#30003;&quot;, &quot;&#37193;&quot;, &quot;&#25100;&quot;, &quot;&#20133;&quot;]
+derivingJapaneseName ''Branch [&quot;&#23376;&quot;, &quot;&#19985;&quot;, &quot;&#23493;&quot;, &quot;&#21359;&quot;, &quot;&#36784;&quot;, &quot;&#24051;&quot;, &quot;&#21320;&quot;, &quot;&#26410;&quot;, &quot;&#30003;&quot;, &quot;&#37193;&quot;, &quot;&#25100;&quot;, &quot;&#20133;&quot;]
 
 -- | the stems and branches, &#24178;&#25903;
 data StemBranch =

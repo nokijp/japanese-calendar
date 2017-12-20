@@ -18,7 +18,7 @@ fromJapaneseName :: JapaneseName a => String -> Maybe a
 
 -- | generates an instance of JapaneseName with a name of type and Japanese
 --   names.
-derivingJapaneseNameBoundedEnum :: Name -> [String] -> DecsQ
+derivingJapaneseName :: Name -> [String] -> DecsQ
 
 module Data.Time.JapaneseCalendar.StemBranch
 
