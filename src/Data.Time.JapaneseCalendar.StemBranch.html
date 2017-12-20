@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE TemplateHaskell #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data</span><span class="hs-operator">.</span><span class="hs-identifier">Time</span><span class="hs-operator">.</span><span class="hs-identifier">JapaneseCalendar</span><span class="hs-operator">.</span><span class="hs-identifier">StemBranch</span><span>
+</span><a name="line-4"></a><span>  </span><span class="hs-special">(</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#StemBranch"><span class="hs-identifier hs-type">StemBranch</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-5"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#Stem"><span class="hs-identifier hs-type">Stem</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-6"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#Branch"><span class="hs-identifier hs-type">Branch</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-7"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#stemBranchToStemAndBranch"><span class="hs-identifier hs-var">stemBranchToStemAndBranch</span></a><span>
+</span><a name="line-8"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#stemBranchFromStemAndBranch"><span class="hs-identifier hs-var">stemBranchFromStemAndBranch</span></a><span>
+</span><a name="line-9"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#yearStemBranch"><span class="hs-identifier hs-var">yearStemBranch</span></a><span>
+</span><a name="line-10"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#monthStemBranch"><span class="hs-identifier hs-var">monthStemBranch</span></a><span>
+</span><a name="line-11"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Data.Time.JapaneseCalendar.StemBranch.html#dayStemBranch"><span class="hs-identifier hs-var">dayStemBranch</span></a><span>
+</span><a name="line-12"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-13"></a><span>
+</span><a name="line-14"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control</span><span class="hs-operator">.</span><span class="hs-identifier">Monad</span><span>
+</span><a name="line-15"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data</span><span class="hs-operator">.</span><span class="hs-identifier">Time</span><span class="hs-operator">.</span><span class="hs-identifier">Calendar</span><span>
+</span><a name="line-16"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Time.JapaneseCalendar.JapaneseName.html"><span class="hs-identifier">Data</span><span class="hs-operator">.</span><span class="hs-identifier">Time</span><span class="hs-operator">.</span><span class="hs-identifier">JapaneseCalendar</span><span class="hs-operator">.</span><span class="hs-identifier">JapaneseName</span></a><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-comment">-- | the ten heavenly stems, &#21313;&#24178;</span><span>
+</span><a name="line-19"></a><span class="hs-keyword">data</span><span> </span><a name="Stem"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Stem"><span class="hs-identifier">Stem</span></a></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-20"></a><span>    </span><a name="Kinoe"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Kinoe"><span class="hs-identifier">Kinoe</span></a></a><span>  </span><span class="hs-comment">-- ^ &#30002;</span><span>
+</span><a name="line-21"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Kinoto"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Kinoto"><span class="hs-identifier">Kinoto</span></a></a><span>  </span><span class="hs-comment">-- ^ &#20057;</span><span>
+</span><a name="line-22"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Hinoe"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Hinoe"><span class="hs-identifier">Hinoe</span></a></a><span>  </span><span class="hs-comment">-- ^ &#19993;</span><span>
+</span><a name="line-23"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Hinoto"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Hinoto"><span class="hs-identifier">Hinoto</span></a></a><span>  </span><span class="hs-comment">-- ^ &#19969;</span><span>
+</span><a name="line-24"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Tsuchinoe"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Tsuchinoe"><span class="hs-identifier">Tsuchinoe</span></a></a><span>  </span><span class="hs-comment">-- ^ &#25098;</span><span>
+</span><a name="line-25"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Tsuchinoto"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Tsuchinoto"><span class="hs-identifier">Tsuchinoto</span></a></a><span>  </span><span class="hs-comment">-- ^ &#24049;</span><span>
+</span><a name="line-26"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Kanoe"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Kanoe"><span class="hs-identifier">Kanoe</span></a></a><span>  </span><span class="hs-comment">-- ^ &#24218;</span><span>
+</span><a name="line-27"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Kanoto"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Kanoto"><span class="hs-identifier">Kanoto</span></a></a><span>  </span><span class="hs-comment">-- ^ &#36763;</span><span>
+</span><a name="line-28"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Mizunoe"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Mizunoe"><span class="hs-identifier">Mizunoe</span></a></a><span>  </span><span class="hs-comment">-- ^ &#22764;</span><span>
+</span><a name="line-29"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="Mizunoto"><a href="Data.Time.JapaneseCalendar.StemBranch.html#Mizunoto"><span class="hs-identifier">Mizunoto</span></a></a><span>  </span><span class="hs-comment">-- ^ &#30328;</span><span>
+</span><a name="line-30"></a><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Show</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Eq</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Bounded</span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">Enum</span><span class="hs-special">)</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-identifier hs-var">derivingJapaneseNameBoundedEnum</span><span> </span><span class="hs-char">''Stem [&quot;&#30002;&quot;, &quot;&#20057;&quot;, &quot;&#19993;&quot;, &quot;&#19969;&quot;, &quot;&#25098;&quot;, &quot;&#24049;&quot;, &quot;&#24218;&quot;, &quot;&#36763;&quot;, &quot;&#22764;&quot;, &quot;&#30328;&quot;]
+
+-- | the twelve earthly branches, &#21313;&#20108;&#25903;
+data Branch =
+    Rat  -- ^ &#23376;
+  | Ox  -- ^ &#19985;
+  | Tiger  -- ^ &#23493;
+  | Rabbit  -- ^ &#21359;
+  | Dragon  -- ^ &#36784;
+  | Snake  -- ^ &#24051;
+  | Horse  -- ^ &#21320;
+  | Goat  -- ^ &#26410;
+  | Monkey  -- ^ &#30003;
+  | Rooster  -- ^ &#37193;
+  | Dog  -- ^ &#25100;
+  | Pig  -- ^ &#20133;
+    deriving (Show, Eq, Bounded, Enum)
+
+derivingJapaneseNameBoundedEnum ''Branch [&quot;&#23376;&quot;, &quot;&#19985;&quot;, &quot;&#23493;&quot;, &quot;&#21359;&quot;, &quot;&#36784;&quot;, &quot;&#24051;&quot;, &quot;&#21320;&quot;, &quot;&#26410;&quot;, &quot;&#30003;&quot;, &quot;&#37193;&quot;, &quot;&#25100;&quot;, &quot;&#20133;&quot;]
+
+-- | the stems and branches, &#24178;&#25903;
+data StemBranch =
+    KinoeRat  -- ^ &#30002;&#23376;
+  | KinotoOx  -- ^ &#20057;&#19985;
+  | HinoeTiger  -- ^ &#19993;&#23493;
+  | HinotoRabbit  -- ^ &#19969;&#21359;
+  | TsuchinoeDragon  -- ^ &#25098;&#36784;
+  | TsuchinotoSnake  -- ^ &#24049;&#24051;
+  | KanoeHorse  -- ^ &#24218;&#21320;
+  | KanotoGoat  -- ^ &#36763;&#26410;
+  | MizunoeMonkey  -- ^ &#22764;&#30003;
+  | MizunotoRooster  -- ^ &#30328;&#37193;
+  | KinoeDog  -- ^ &#30002;&#25100;
+  | KinotoPig  -- ^ &#20057;&#20133;
+  | HinoeRat  -- ^ &#19993;&#23376;
+  | HinotoOx  -- ^ &#19969;&#19985;
+  | TsuchinoeTiger  -- ^ &#25098;&#23493;
+  | TsuchinotoRabbit  -- ^ &#24049;&#21359;
+  | KanoeDragon  -- ^ &#24218;&#36784;
+  | KanotoSnake  -- ^ &#36763;&#24051;
+  | MizunoeHorse  -- ^ &#22764;&#21320;
+  | MizunotoGoat  -- ^ &#30328;&#26410;
+  | KinoeMonkey  -- ^ &#30002;&#30003;
+  | KinotoRooster  -- ^ &#20057;&#37193;
+  | HinoeDog  -- ^ &#19993;&#25100;
+  | HinotoPig  -- ^ &#19969;&#20133;
+  | TsuchinoeRat  -- ^ &#25098;&#23376;
+  | TsuchinotoOx  -- ^ &#24049;&#19985;
+  | KanoeTiger  -- ^ &#24218;&#23493;
+  | KanotoRabbit  -- ^ &#36763;&#21359;
+  | MizunoeDragon  -- ^ &#22764;&#36784;
+  | MizunotoSnake  -- ^ &#30328;&#24051;
+  | KinoeHorse  -- ^ &#30002;&#21320;
+  | KinotoGoat  -- ^ &#20057;&#26410;
+  | HinoeMonkey  -- ^ &#19993;&#30003;
+  | HinotoRooster  -- ^ &#19969;&#37193;
+  | TsuchinoeDog  -- ^ &#25098;&#25100;
+  | TsuchinotoPig  -- ^ &#24049;&#20133;
+  | KanoeRat  -- ^ &#24218;&#23376;
+  | KanotoOx  -- ^ &#36763;&#19985;
+  | MizunoeTiger  -- ^ &#22764;&#23493;
+  | MizunotoRabbit  -- ^ &#30328;&#21359;
+  | KinoeDragon  -- ^ &#30002;&#36784;
+  | KinotoSnake  -- ^ &#20057;&#24051;
+  | HinoeHorse  -- ^ &#19993;&#21320;
+  | HinotoGoat  -- ^ &#19969;&#26410;
+  | TsuchinoeMonkey  -- ^ &#25098;&#30003;
+  | TsuchinotoRooster  -- ^ &#24049;&#37193;
+  | KanoeDog  -- ^ &#24218;&#25100;
+  | KanotoPig  -- ^ &#36763;&#20133;
+  | MizunoeRat  -- ^ &#22764;&#23376;
+  | MizunotoOx  -- ^ &#30328;&#19985;
+  | KinoeTiger  -- ^ &#30002;&#23493;
+  | KinotoRabbit  -- ^ &#20057;&#21359;
+  | HinoeDragon  -- ^ &#19993;&#36784;
+  | HinotoSnake  -- ^ &#19969;&#24051;
+  | TsuchinoeHorse  -- ^ &#25098;&#21320;
+  | TsuchinotoGoat  -- ^ &#24049;&#26410;
+  | KanoeMonkey  -- ^ &#24218;&#30003;
+  | KanotoRooster  -- ^ &#36763;&#37193;
+  | MizunoeDog  -- ^ &#22764;&#25100;
+  | MizunotoPig  -- ^ &#30328;&#20133;
+    deriving (Show, Eq, Bounded, Enum)
+
+instance JapaneseName StemBranch where
+  toJapaneseName = (\(s, b) -&gt; toJapaneseName s ++ toJapaneseName b) . stemBranchToStemAndBranch
+  fromJapaneseName [stemName, branchName] =
+    join $ stemBranchFromStemAndBranch &lt;$&gt; fromJapaneseName [stemName] &lt;*&gt; fromJapaneseName [branchName]
+  fromJapaneseName _ = Nothing
+
+-- | extracts a stem and a branch from a stem-branch
+stemBranchToStemAndBranch :: StemBranch -&gt; (Stem, Branch)
+stemBranchToStemAndBranch stemBranch = (toEnum $ fromEnum stemBranch `mod` 10, toEnum $ fromEnum stemBranch `mod` 12)
+
+-- | constructs a stem-branch from a stem and a branch
+stemBranchFromStemAndBranch :: Stem -&gt; Branch -&gt; Maybe StemBranch
+stemBranchFromStemAndBranch stem branch = if even diff then Just (toEnum stemBranchIndex) else Nothing
+  where
+    stemIndex = fromEnum stem
+    branchIndex = fromEnum branch
+    stemBranchIndex = diff * 5 + stemIndex
+    diff = (stemIndex - branchIndex) `mod` 12
+
+-- | returns a stem-branch of a specified year
+yearStemBranch :: Integer -&gt; StemBranch
+yearStemBranch year = toEnum $ fromIntegral $ (year + 56) `mod` 60
+
+-- | returns a stem-branch of a specified month
+monthStemBranch :: Integer -&gt; Int -&gt; StemBranch
+monthStemBranch year month = toEnum $ fromIntegral $ (year * 12 + toInteger month + 13) `mod` 60
+
+-- | returns a stem-branch of a specified day
+dayStemBranch :: Day -&gt; StemBranch
+dayStemBranch day = toEnum $ fromIntegral $ (toModifiedJulianDay day + 50) `mod` 60
+</span></pre></body></html>

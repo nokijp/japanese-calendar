@@ -5,9 +5,307 @@
 @package japanese-calendar
 @version 0.1.0.0
 
-module Data.Time.JapaneseCalendar.Internal.DataUtils
-enumToName :: Enum a => [String] -> a -> String
-enumFromName :: Enum a => [String] -> String -> Maybe a
+module Data.Time.JapaneseCalendar.JapaneseName
+
+-- | mutual conversion between values and Japanese names.
+class JapaneseName a
+
+-- | converts values to names.
+toJapaneseName :: JapaneseName a => a -> String
+
+-- | converts names to values if possible.
+fromJapaneseName :: JapaneseName a => String -> Maybe a
+
+-- | generates an instance of JapaneseName with a name of type and Japanese
+--   names.
+derivingJapaneseNameBoundedEnum :: Name -> [String] -> DecsQ
+
+module Data.Time.JapaneseCalendar.StemBranch
+
+-- | the stems and branches, 干支
+data StemBranch
+
+-- | 甲子
+KinoeRat :: StemBranch
+
+-- | 乙丑
+KinotoOx :: StemBranch
+
+-- | 丙寅
+HinoeTiger :: StemBranch
+
+-- | 丁卯
+HinotoRabbit :: StemBranch
+
+-- | 戊辰
+TsuchinoeDragon :: StemBranch
+
+-- | 己巳
+TsuchinotoSnake :: StemBranch
+
+-- | 庚午
+KanoeHorse :: StemBranch
+
+-- | 辛未
+KanotoGoat :: StemBranch
+
+-- | 壬申
+MizunoeMonkey :: StemBranch
+
+-- | 癸酉
+MizunotoRooster :: StemBranch
+
+-- | 甲戌
+KinoeDog :: StemBranch
+
+-- | 乙亥
+KinotoPig :: StemBranch
+
+-- | 丙子
+HinoeRat :: StemBranch
+
+-- | 丁丑
+HinotoOx :: StemBranch
+
+-- | 戊寅
+TsuchinoeTiger :: StemBranch
+
+-- | 己卯
+TsuchinotoRabbit :: StemBranch
+
+-- | 庚辰
+KanoeDragon :: StemBranch
+
+-- | 辛巳
+KanotoSnake :: StemBranch
+
+-- | 壬午
+MizunoeHorse :: StemBranch
+
+-- | 癸未
+MizunotoGoat :: StemBranch
+
+-- | 甲申
+KinoeMonkey :: StemBranch
+
+-- | 乙酉
+KinotoRooster :: StemBranch
+
+-- | 丙戌
+HinoeDog :: StemBranch
+
+-- | 丁亥
+HinotoPig :: StemBranch
+
+-- | 戊子
+TsuchinoeRat :: StemBranch
+
+-- | 己丑
+TsuchinotoOx :: StemBranch
+
+-- | 庚寅
+KanoeTiger :: StemBranch
+
+-- | 辛卯
+KanotoRabbit :: StemBranch
+
+-- | 壬辰
+MizunoeDragon :: StemBranch
+
+-- | 癸巳
+MizunotoSnake :: StemBranch
+
+-- | 甲午
+KinoeHorse :: StemBranch
+
+-- | 乙未
+KinotoGoat :: StemBranch
+
+-- | 丙申
+HinoeMonkey :: StemBranch
+
+-- | 丁酉
+HinotoRooster :: StemBranch
+
+-- | 戊戌
+TsuchinoeDog :: StemBranch
+
+-- | 己亥
+TsuchinotoPig :: StemBranch
+
+-- | 庚子
+KanoeRat :: StemBranch
+
+-- | 辛丑
+KanotoOx :: StemBranch
+
+-- | 壬寅
+MizunoeTiger :: StemBranch
+
+-- | 癸卯
+MizunotoRabbit :: StemBranch
+
+-- | 甲辰
+KinoeDragon :: StemBranch
+
+-- | 乙巳
+KinotoSnake :: StemBranch
+
+-- | 丙午
+HinoeHorse :: StemBranch
+
+-- | 丁未
+HinotoGoat :: StemBranch
+
+-- | 戊申
+TsuchinoeMonkey :: StemBranch
+
+-- | 己酉
+TsuchinotoRooster :: StemBranch
+
+-- | 庚戌
+KanoeDog :: StemBranch
+
+-- | 辛亥
+KanotoPig :: StemBranch
+
+-- | 壬子
+MizunoeRat :: StemBranch
+
+-- | 癸丑
+MizunotoOx :: StemBranch
+
+-- | 甲寅
+KinoeTiger :: StemBranch
+
+-- | 乙卯
+KinotoRabbit :: StemBranch
+
+-- | 丙辰
+HinoeDragon :: StemBranch
+
+-- | 丁巳
+HinotoSnake :: StemBranch
+
+-- | 戊午
+TsuchinoeHorse :: StemBranch
+
+-- | 己未
+TsuchinotoGoat :: StemBranch
+
+-- | 庚申
+KanoeMonkey :: StemBranch
+
+-- | 辛酉
+KanotoRooster :: StemBranch
+
+-- | 壬戌
+MizunoeDog :: StemBranch
+
+-- | 癸亥
+MizunotoPig :: StemBranch
+
+-- | the ten heavenly stems, 十干
+data Stem
+
+-- | 甲
+Kinoe :: Stem
+
+-- | 乙
+Kinoto :: Stem
+
+-- | 丙
+Hinoe :: Stem
+
+-- | 丁
+Hinoto :: Stem
+
+-- | 戊
+Tsuchinoe :: Stem
+
+-- | 己
+Tsuchinoto :: Stem
+
+-- | 庚
+Kanoe :: Stem
+
+-- | 辛
+Kanoto :: Stem
+
+-- | 壬
+Mizunoe :: Stem
+
+-- | 癸
+Mizunoto :: Stem
+
+-- | the twelve earthly branches, 十二支
+data Branch
+
+-- | 子
+Rat :: Branch
+
+-- | 丑
+Ox :: Branch
+
+-- | 寅
+Tiger :: Branch
+
+-- | 卯
+Rabbit :: Branch
+
+-- | 辰
+Dragon :: Branch
+
+-- | 巳
+Snake :: Branch
+
+-- | 午
+Horse :: Branch
+
+-- | 未
+Goat :: Branch
+
+-- | 申
+Monkey :: Branch
+
+-- | 酉
+Rooster :: Branch
+
+-- | 戌
+Dog :: Branch
+
+-- | 亥
+Pig :: Branch
+
+-- | extracts a stem and a branch from a stem-branch
+stemBranchToStemAndBranch :: StemBranch -> (Stem, Branch)
+
+-- | constructs a stem-branch from a stem and a branch
+stemBranchFromStemAndBranch :: Stem -> Branch -> Maybe StemBranch
+
+-- | returns a stem-branch of a specified year
+yearStemBranch :: Integer -> StemBranch
+
+-- | returns a stem-branch of a specified month
+monthStemBranch :: Integer -> Int -> StemBranch
+
+-- | returns a stem-branch of a specified day
+dayStemBranch :: Day -> StemBranch
+instance GHC.Enum.Enum Data.Time.JapaneseCalendar.StemBranch.StemBranch
+instance GHC.Enum.Bounded Data.Time.JapaneseCalendar.StemBranch.StemBranch
+instance GHC.Classes.Eq Data.Time.JapaneseCalendar.StemBranch.StemBranch
+instance GHC.Show.Show Data.Time.JapaneseCalendar.StemBranch.StemBranch
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.StemBranch.Branch
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.StemBranch.StemBranch
+instance GHC.Enum.Enum Data.Time.JapaneseCalendar.StemBranch.Branch
+instance GHC.Enum.Bounded Data.Time.JapaneseCalendar.StemBranch.Branch
+instance GHC.Classes.Eq Data.Time.JapaneseCalendar.StemBranch.Branch
+instance GHC.Show.Show Data.Time.JapaneseCalendar.StemBranch.Branch
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.StemBranch.Stem
+instance GHC.Enum.Enum Data.Time.JapaneseCalendar.StemBranch.Stem
+instance GHC.Enum.Bounded Data.Time.JapaneseCalendar.StemBranch.Stem
+instance GHC.Classes.Eq Data.Time.JapaneseCalendar.StemBranch.Stem
+instance GHC.Show.Show Data.Time.JapaneseCalendar.StemBranch.Stem
 
 module Data.Time.JapaneseCalendar.Internal.AstroUtils
 
@@ -121,16 +419,10 @@ RainWater :: SolarTerm
 -- | 啓蟄
 AwakeningOfInsects :: SolarTerm
 
--- | returns a Japanese name of a solar term
-solarTermToJapaneseName :: SolarTerm -> String
-
--- | converts a Japanese name of a solar term into a SolarTerm
-solarTermFromJapaneseName :: String -> Maybe SolarTerm
-
--- | tests whether the solar term is a segment point, sekki
+-- | tests whether a solar term is a segment point, sekki
 isSegmentPoint :: SolarTerm -> Bool
 
--- | tests whether the solar term is a center point, chuki
+-- | tests whether a solar term is a center point, chuki
 isCenterPoint :: SolarTerm -> Bool
 
 -- | returns a solar term of a specified day
@@ -145,6 +437,7 @@ solarTermsFrom :: TimeZone -> Day -> [(SolarTerm, Day)]
 
 -- | finds the nearest specified solar term
 findNearestSolarTerm :: TimeZone -> SolarTerm -> Day -> Day
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.SolarTerm.SolarTerm
 instance GHC.Enum.Enum Data.Time.JapaneseCalendar.SolarTerm.SolarTerm
 instance GHC.Enum.Bounded Data.Time.JapaneseCalendar.SolarTerm.SolarTerm
 instance GHC.Classes.Eq Data.Time.JapaneseCalendar.SolarTerm.SolarTerm
@@ -205,23 +498,16 @@ TempoDate :: Integer -> TempoMonth -> Int -> TempoDate
 [tempoMonth] :: TempoDate -> TempoMonth
 [tempoDay] :: TempoDate -> Int
 
--- | gets the number of the month which starts from one
+-- | gets a number of a month which starts from one
 monthNumber :: TempoMonth -> Int
 
 -- | tests whether a month is a leap month
 isLeapMonth :: TempoMonth -> Bool
 
--- | returns a Japanese name of a month in the Tempo calendar
-tempoMonthToJapaneseName :: TempoMonth -> String
-
--- | converts a Japanese name of a month in the Tempo calendar into a
---   TempoMonth
-tempoMonthFromJapaneseName :: String -> Maybe TempoMonth
-
--- | the cyclic successor of TempoMonthType
+-- | a cyclic successor of TempoMonthType
 nextTempoMonthType :: TempoMonthType -> TempoMonthType
 
--- | the cyclic predecessor of TempoMonthType
+-- | a cyclic predecessor of TempoMonthType
 previousTempoMonthType :: TempoMonthType -> TempoMonthType
 
 -- | converts a date into a date in the Tempo calendar
@@ -231,12 +517,14 @@ instance GHC.Classes.Eq Data.Time.JapaneseCalendar.TempoCalendar.TempoDate
 instance GHC.Show.Show Data.Time.JapaneseCalendar.TempoCalendar.TempoDate
 instance GHC.Classes.Eq Data.Time.JapaneseCalendar.TempoCalendar.TempoMonth
 instance GHC.Show.Show Data.Time.JapaneseCalendar.TempoCalendar.TempoMonth
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.TempoCalendar.TempoMonthType
+instance GHC.Classes.Ord Data.Time.JapaneseCalendar.TempoCalendar.TempoMonth
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.TempoCalendar.TempoMonth
 instance GHC.Classes.Ord Data.Time.JapaneseCalendar.TempoCalendar.TempoMonthType
 instance GHC.Enum.Enum Data.Time.JapaneseCalendar.TempoCalendar.TempoMonthType
 instance GHC.Enum.Bounded Data.Time.JapaneseCalendar.TempoCalendar.TempoMonthType
 instance GHC.Classes.Eq Data.Time.JapaneseCalendar.TempoCalendar.TempoMonthType
 instance GHC.Show.Show Data.Time.JapaneseCalendar.TempoCalendar.TempoMonthType
-instance GHC.Classes.Ord Data.Time.JapaneseCalendar.TempoCalendar.TempoMonth
 
 module Data.Time.JapaneseCalendar.Rokuyo
 
@@ -261,17 +549,12 @@ Taian :: Rokuyo
 -- | 赤口
 Shakko :: Rokuyo
 
--- | returns a Japanese name of a rokuyo
-rokuyoToJapaneseName :: Rokuyo -> String
-
--- | converts a Japanese name of a rokuyo into a SolarTerm
-rokuyoFromJapaneseName :: String -> Maybe Rokuyo
-
 -- | calculates a rokuyo from a Tempo date
 rokuyoFromTempoDate :: TempoDate -> Rokuyo
 
 -- | calculates a rokuyo from a date
 rokuyo :: TimeZone -> Day -> Maybe Rokuyo
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.Rokuyo.Rokuyo
 instance GHC.Enum.Bounded Data.Time.JapaneseCalendar.Rokuyo.Rokuyo
 instance GHC.Enum.Enum Data.Time.JapaneseCalendar.Rokuyo.Rokuyo
 instance GHC.Classes.Eq Data.Time.JapaneseCalendar.Rokuyo.Rokuyo
@@ -339,12 +622,10 @@ TransferHoliday :: HolidayType
 -- | 国民の休日
 CitizensHoliday :: HolidayType
 
--- | returns a name of a holiday type
-holidayName :: HolidayType -> String
-
--- | returns the holiday type of the specifed day
+-- | returns a holiday type of a specified day
 holidayType :: Day -> Maybe HolidayType
 instance GHC.Enum.Enum Data.Time.JapaneseCalendar.Holiday.DayOfWeek
 instance GHC.Classes.Eq Data.Time.JapaneseCalendar.Holiday.DayOfWeek
+instance Data.Time.JapaneseCalendar.JapaneseName.JapaneseName Data.Time.JapaneseCalendar.Holiday.HolidayType
 instance GHC.Classes.Eq Data.Time.JapaneseCalendar.Holiday.HolidayType
 instance GHC.Show.Show Data.Time.JapaneseCalendar.Holiday.HolidayType
