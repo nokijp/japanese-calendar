@@ -2,7 +2,7 @@
 
 module Data.Time.JapaneseCalendar.JapaneseName
   ( JapaneseName(..)
-  , derivingJapaneseName
+  , deriveJapaneseName
   ) where
 
 import Control.Monad
@@ -16,8 +16,8 @@ class JapaneseName a where
   fromJapaneseName :: String -> Maybe a
 
 -- | generates an instance of JapaneseName with a name of type and Japanese names.
-derivingJapaneseName :: Name -> [String] -> DecsQ
-derivingJapaneseName typeName japaneseNames = do
+deriveJapaneseName :: Name -> [String] -> DecsQ
+deriveJapaneseName typeName japaneseNames = do
   info <- reify typeName
   constructors <- case info of
     TyConI (DataD [] _ [] Nothing cs _) -> return cs

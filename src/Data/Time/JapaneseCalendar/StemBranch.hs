@@ -29,7 +29,7 @@ data Stem =
   | Mizunoto  -- ^ 癸
     deriving (Show, Eq, Bounded, Enum)
 
-derivingJapaneseName ''Stem ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+deriveJapaneseName ''Stem ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
 -- | the twelve earthly branches, 十二支
 data Branch =
@@ -47,7 +47,7 @@ data Branch =
   | Pig  -- ^ 亥
     deriving (Show, Eq, Bounded, Enum)
 
-derivingJapaneseName ''Branch ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
+deriveJapaneseName ''Branch ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
 
 -- | the stems and branches, 干支
 data StemBranch =

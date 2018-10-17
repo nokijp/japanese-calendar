@@ -21,7 +21,7 @@ data Rokuyo =
   | Shakko  -- ^ 赤口
     deriving (Show, Eq, Enum, Bounded)
 
-derivingJapaneseName ''Rokuyo ["先勝", "友引", "先負", "仏滅", "大安", "赤口"]
+deriveJapaneseName ''Rokuyo ["先勝", "友引", "先負", "仏滅", "大安", "赤口"]
 
 -- | calculates a rokuyo from a Tempo date
 rokuyoFromTempoDate :: TempoDate -> Rokuyo
