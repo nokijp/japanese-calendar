@@ -19,13 +19,6 @@ This library contains:
 
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar
-import Data.Time.JapaneseCalendar.Format
-import Data.Time.JapaneseCalendar.Holiday
-import Data.Time.JapaneseCalendar.JapaneseName
-import Data.Time.JapaneseCalendar.Rokuyo
-import Data.Time.JapaneseCalendar.SolarTerm
-import Data.Time.JapaneseCalendar.StemBranch
-import Data.Time.JapaneseCalendar.TempoCalendar
 
 main :: IO ()
 main = do

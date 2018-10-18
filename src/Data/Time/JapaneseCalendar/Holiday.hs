@@ -10,9 +10,9 @@ import Data.Foldable
 import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Calendar.WeekDate
-import Data.Time.JapaneseCalendar
 import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.SolarTerm
+import Data.Time.JapaneseCalendar.Utils
 
 -- | Japanese holidays
 data HolidayType =

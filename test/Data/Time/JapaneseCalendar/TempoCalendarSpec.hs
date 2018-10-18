@@ -7,9 +7,9 @@ import Control.Monad
 import Data.List
 import Data.Maybe
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar
 import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.TempoCalendar
+import Data.Time.JapaneseCalendar.Utils
 import Test.Hspec
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Property

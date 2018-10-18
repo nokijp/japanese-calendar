@@ -5,9 +5,9 @@ module Data.Time.JapaneseCalendar.SolarTermSpec
 
 import Control.Monad
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar
 import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.SolarTerm
+import Data.Time.JapaneseCalendar.Utils
 import Test.Hspec
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Property

@@ -5,10 +5,10 @@ module Data.Time.JapaneseCalendar.RokuyoSpec
 
 import Control.Monad
 import Data.Time.Calendar
-import Data.Time.JapaneseCalendar
 import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.Rokuyo
 import Data.Time.JapaneseCalendar.TempoCalendar
+import Data.Time.JapaneseCalendar.Utils
 import Test.Hspec
 
 main :: IO ()
