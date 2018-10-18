@@ -3,6 +3,7 @@ version:             0.2.0.0
 
 dependencies:
 - base >= 4.7 && < 5
+- template-haskell
 - time
 
 library:
@@ -11,7 +12,7 @@ library:
   - -Wall
   - -Werror
   dependencies:
-  - template-haskell
+  - parsec
   - transformers
 
 tests:

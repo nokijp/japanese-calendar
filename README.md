@@ -15,10 +15,22 @@ This library contains:
 - Japanese public holidays (国民の祝日)
 
 ```haskell
+{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+
+import Data.Time.Calendar
+import Data.Time.JapaneseCalendar
+import Data.Time.JapaneseCalendar.Format
+import Data.Time.JapaneseCalendar.Holiday
+import Data.Time.JapaneseCalendar.JapaneseName
+import Data.Time.JapaneseCalendar.Rokuyo
+import Data.Time.JapaneseCalendar.SolarTerm
+import Data.Time.JapaneseCalendar.StemBranch
+import Data.Time.JapaneseCalendar.TempoCalendar
+
 main :: IO ()
 main = do
   let tempoDate20010523 = tempoDate jst $ fromGregorian 2001 5 23 :: Maybe TempoDate
-  print $ formatTempoDate <$> tempoDate20010523  -- Just "2001年 閏卯月 1日"
+  print $ format <$> tempoDate20010523  -- Just "2001年 閏4月 1日"
 
   let rokuyo20000614 = rokuyo jst $ fromGregorian 2000 6 14 :: Maybe Rokuyo
   print $ toJapaneseName <$> rokuyo20000614  -- Just "大安"
@@ -32,6 +44,6 @@ main = do
   let holiday20001103 = holidayType $ fromGregorian 2000 11 3 :: Maybe HolidayType
   print $ toJapaneseName <$> holiday20001103  -- Just "文化の日"
 
-formatTempoDate :: TempoDate -> String
-formatTempoDate (TempoDate year month day) = show year ++ "年 " ++ toJapaneseName month ++ " " ++ show day ++ "日"
+format :: TempoDate -> String
+format = [formatTempoDate|%y年 %M月 %d日|]
 ```
