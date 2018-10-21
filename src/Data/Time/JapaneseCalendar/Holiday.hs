@@ -7,6 +7,8 @@ module Data.Time.JapaneseCalendar.Holiday
 
 import Control.Applicative
 import Data.Foldable
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as M
 import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Calendar.WeekDate
@@ -59,18 +61,23 @@ deriveJapaneseName ''HolidayType
 
 -- | returns a holiday type of a specified day
 holidayType :: Day -> Maybe HolidayType
-holidayType day
-  | day >= fromGregorian 2016 1 1 = holiday2016 day
-  | day >= fromGregorian 2007 1 1 = holiday2007 day
-  | day >= fromGregorian 2003 1 1 = holiday2003 day
-  | day >= fromGregorian 2000 1 1 = holiday2000 day
-  | day >= fromGregorian 1996 1 1 = holiday1996 day
-  | day >= fromGregorian 1989 2 17 = holiday1989 day
-  | day >= fromGregorian 1985 12 27 = holiday1985 day
-  | day >= fromGregorian 1973 4 12 = holiday1973 day
-  | day >= fromGregorian 1966 6 25 = holiday1966 day
-  | day >= fromGregorian 1948 7 20 = holiday1948 day
-  | otherwise = Nothing
+holidayType day = do
+  f <- snd <$> M.lookupLE day holidayFuncTable
+  f day
+
+holidayFuncTable :: Map Day (Day -> Maybe HolidayType)
+holidayFuncTable = M.fromList
+  [ (fromGregorian 1948 7 20, holiday1948)
+  , (fromGregorian 1966 6 25, holiday1966)
+  , (fromGregorian 1973 4 12, holiday1973)
+  , (fromGregorian 1985 12 27, holiday1985)
+  , (fromGregorian 1989 2 17, holiday1989)
+  , (fromGregorian 1996 1 1, holiday1996)
+  , (fromGregorian 2000 1 1, holiday2000)
+  , (fromGregorian 2003 1 1, holiday2003)
+  , (fromGregorian 2007 1 1, holiday2007)
+  , (fromGregorian 2016 1 1, holiday2016)
+  ]
 
 holiday2016 :: Day -> Maybe HolidayType
 holiday2016 day =
