@@ -26,4 +26,4 @@ spec = do
       , (timeFromYMDHMS 2010 2 20 0 0 0, timeFromYMDHMS 2010 2 14 2 51 0)
       ] $ \(inputTime, expectedTime) ->
         it ("should return " ++ show expectedTime ++ " when given " ++ show inputTime) $
-          nearestNewMoon inputTime `shouldSatisfy` (isAlmostEqual (2 * 60) expectedTime)
+          nearestNewMoon inputTime `shouldSatisfy` isAlmostEqualUTCTime (2 * 60) expectedTime

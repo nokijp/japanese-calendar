@@ -32,7 +32,7 @@ centuryInSeconds :: Double
 centuryInSeconds = 36525 * 86400
 
 j2000TAI :: AbsoluteTime
-j2000TAI = utcToTAI $ UTCTime (fromGregorian 2000 1 1) (picosecondsToDiffTime $ (43200000 - 32184) * 10 ^ (9 :: Int))
+j2000TAI = utcToTAI $ UTCTime (fromGregorian 2000 1 1) (picosecondsToDiffTime $ (43200000 - 64184) * 1000000000)
 
 utcToTAI :: UTCTime -> AbsoluteTime
 utcToTAI = fromJust . utcToTAITime leapSecondMap1958
@@ -42,9 +42,7 @@ taiToUTC = fromJust . taiToUTCTime leapSecondMap1958
 
 leapSecondMap1958 :: Day -> Maybe Int
 leapSecondMap1958 utcDay =
-  let
-    tableValue = snd <$> M.lookupLE utcDay leapSecondTable1958
-    leapSeconds = fromMaybe 0 tableValue
+  let leapSeconds = maybe 0 snd $ M.lookupLE utcDay leapSecondTable1958
   in Just leapSeconds
 
 leapSecondTable1958 :: Map Day Int

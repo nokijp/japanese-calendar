@@ -38,4 +38,4 @@ spec = do
       , (360, timeFromYMDHMS 2010 4 1 0 0 0, timeFromYMDHMS 2010 3 20 17 32 0)
       ] $ \(longitude, inputTime, expectedTime) ->
         it ("should return " ++ show expectedTime ++ " when given " ++ show (longitude, inputTime)) $
-          sunEclipticLongitudeToTime longitude inputTime `shouldSatisfy` (isAlmostEqual (10 * 60) expectedTime)
+          sunEclipticLongitudeToTime longitude inputTime `shouldSatisfy` isAlmostEqualUTCTime (10 * 60) expectedTime
