@@ -8,6 +8,7 @@ module Data.Time.JapaneseCalendar.Internal.Moon
 import Data.Fixed
 import Data.Time.Clock
 import Data.Time.JapaneseCalendar.Internal.AstroUtils
+import Data.Time.JapaneseCalendar.Internal.JulianCentury
 import Data.Time.JapaneseCalendar.Internal.Sun
 
 -- | calculates ecliptic longitude of the moon in degrees from a UTC time.

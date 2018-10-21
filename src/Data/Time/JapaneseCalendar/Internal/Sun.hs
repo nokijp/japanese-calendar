@@ -6,6 +6,7 @@ module Data.Time.JapaneseCalendar.Internal.Sun
 import Data.Fixed
 import Data.Time.Clock
 import Data.Time.JapaneseCalendar.Internal.AstroUtils
+import Data.Time.JapaneseCalendar.Internal.JulianCentury
 
 -- | calculates ecliptic longitude of the sun in degrees from a UTC time.
 sunEclipticLongitude :: UTCTime -> Double
