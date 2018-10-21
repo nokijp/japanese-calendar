@@ -3,7 +3,7 @@
 
 
 @package japanese-calendar
-@version 0.2.0.0
+@version 0.3.0.0
 
 module Data.Time.JapaneseCalendar.Internal.AstroUtils
 
@@ -564,10 +564,10 @@ instance GHC.Show.Show Data.Time.JapaneseCalendar.Rokuyo.Rokuyo
 
 module Data.Time.JapaneseCalendar.Format
 
--- | a format tool for <a>TempoDate</a> using Template Haskell
+-- | a formatter for <a>TempoDate</a>.
 --   
---   <tt>[formatTempoDate|%y年%M月%d日|]</tt> generates a function converting
---   a <a>TempoDate</a> into a <a>String</a> like <tt>"2000年1月2日"</tt>
+--   <tt>formatTempoDate "%y年%M月%d日"</tt> converts a <a>TempoDate</a> into
+--   a <a>String</a> like <tt>"2000年1月2日"</tt>.
 --   
 --   <ul>
 --   <li><i><tt>%y</tt></i> year (e.g. <tt>"2000"</tt>)</li>
@@ -582,13 +582,25 @@ module Data.Time.JapaneseCalendar.Format
 --   <li><i><tt>%d</tt></i> day, <tt>"1"</tt> - <tt>"31"</tt></li>
 --   </ul>
 --   
---   padding qualifiers like printf in C are also available
+--   padding qualifiers like printf in C are also available.
 --   
 --   <ul>
 --   <li><i><tt>%2m</tt></i> pad with two spaces</li>
 --   <li><i><tt>%02m</tt></i> pad with two zeros</li>
 --   </ul>
-formatTempoDate :: QuasiQuoter
+formatTempoDate :: String -> TempoDate -> Either String String
+
+-- | a Template Haskell version of <a>formatTempoDate</a>, which generates
+--   a formatter at compile-time.
+--   
+--   if a given format is invalid, compilation will be failed.
+--   
+--   <tt>[qFormatTempoDate|fmt|]</tt> is semantically the same as
+--   <tt>formatTempoDate "fmt"</tt>.
+qFormatTempoDate :: QuasiQuoter
+instance Language.Haskell.TH.Syntax.Lift Data.Time.JapaneseCalendar.Format.Component
+instance Language.Haskell.TH.Syntax.Lift Data.Time.JapaneseCalendar.Format.ComponentType
+instance Language.Haskell.TH.Syntax.Lift Data.Time.JapaneseCalendar.Format.PadType
 
 module Data.Time.JapaneseCalendar.Utils
 jst :: TimeZone
