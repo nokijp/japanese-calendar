@@ -1,21 +1,22 @@
-{-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
+{-# LANGUAGE TemplateHaskell, QuasiQuotes, DeriveLift #-}
 
 module Data.Time.JapaneseCalendar.Format
   ( formatTempoDate
+  , qFormatTempoDate
   ) where
 
 import Control.Arrow
-import Data.Foldable
 import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.JapaneseCalendar.TempoCalendar
 import Language.Haskell.TH
+import Language.Haskell.TH.Syntax
 import Language.Haskell.TH.Quote
 import Text.Parsec
 import Text.Parsec.String
 
--- | a format tool for 'TempoDate' using Template Haskell
+-- | a formatter for 'TempoDate'.
 --
--- @[formatTempoDate|%y年%M月%d日|]@ generates a function converting a 'TempoDate' into a 'String' like @"2000年1月2日"@
+-- @formatTempoDate "%y年%M月%d日"@ converts a 'TempoDate' into a 'String' like @"2000年1月2日"@.
 --
 -- [@%y@] year (e.g. @"2000"@)
 --
@@ -31,22 +32,38 @@ import Text.Parsec.String
 --
 -- [@%d@] day, @"1"@ - @"31"@
 --
--- padding qualifiers like printf in C are also available
+-- padding qualifiers like printf in C are also available.
 --
 -- [@%2m@] pad with two spaces
 --
 -- [@%02m@] pad with two zeros
-formatTempoDate :: QuasiQuoter
-formatTempoDate = QuasiQuoter
+formatTempoDate :: String -> TempoDate -> Either String String
+formatTempoDate str td = do
+  components <- parseFormat str
+  return $ format components td
+
+-- | a Template Haskell version of 'formatTempoDate', which generates a formatter at compile-time.
+--
+-- if a given format is invalid, compilation will be failed.
+--
+-- @[qFormatTempoDate|fmt|]@ is semantically the same as @formatTempoDate "fmt"@.
+qFormatTempoDate :: QuasiQuoter
+qFormatTempoDate = QuasiQuoter
   { quoteExp = quoteFormatExp
   , quotePat = undefined
   , quoteType = undefined
   , quoteDec = undefined
   }
 
+quoteFormatExp :: String -> ExpQ
+quoteFormatExp str = do
+  components <- either fail return $ parseFormat str
+  [|format components|]
+
 data Component =
     StringComponent String
   | FormatComponent ComponentType
+    deriving Lift
 
 data ComponentType =
     YearNum PadType  -- %y "2000"
@@ -56,33 +73,31 @@ data ComponentType =
   | MonthName  -- %b "神無月"
   | MonthFullName  -- %B "閏神無月"
   | DayNum PadType  -- %d "1" - "31"
+    deriving Lift
 
 data PadType =
     NonePad
   | SpacePad Int
   | ZeroPad Int
+    deriving Lift
 
-quoteFormatExp :: String -> ExpQ
-quoteFormatExp str = do
-  x <- newName "_x"
-  components <- either fail return $ parseFormat str
-  exps <- mapM (formatExp x) components
-  lamE [varP x] $ foldlM (\a b -> [|$(return a) ++ $(return b)|]) (LitE $ StringL "") exps
+format :: [Component] -> TempoDate -> String
+format components td = foldMap (flip formatComponent td) components
 
-formatExp :: Name -> Component -> ExpQ
-formatExp _ (StringComponent s) = litE $ StringL s
-formatExp x (FormatComponent (YearNum pt)) = [|$(padFunc pt) $ show $ tempoYear $(varE x)|]
-formatExp x (FormatComponent LeapMonthName) = [|leapMonthSign $(varE x)|]
-formatExp x (FormatComponent (MonthNum pt)) = [|$(padFunc pt) $ show $ monthNumber $ tempoMonth $(varE x)|]
-formatExp x (FormatComponent (MonthFullNum pt)) = [|$(formatExp x $ FormatComponent LeapMonthName) ++ $(formatExp x $ FormatComponent $ MonthNum pt)|]
-formatExp x (FormatComponent MonthName) = [|toJapaneseName $ tempoMonthType $ tempoMonth $(varE x)|]
-formatExp x (FormatComponent MonthFullName) = [|$(formatExp x $ FormatComponent LeapMonthName) ++ $(formatExp x $ FormatComponent MonthName)|]
-formatExp x (FormatComponent (DayNum pt)) = [|$(padFunc pt) $ show $ tempoDay $(varE x)|]
+formatComponent :: Component -> TempoDate -> String
+formatComponent (StringComponent s) _ = s
+formatComponent (FormatComponent (YearNum pt)) td = padFunc pt $ show $ tempoYear td
+formatComponent (FormatComponent LeapMonthName) td = leapMonthSign td
+formatComponent (FormatComponent (MonthNum pt)) td = padFunc pt $ show $ monthNumber $ tempoMonth td
+formatComponent (FormatComponent (MonthFullNum pt)) td = formatComponent (FormatComponent LeapMonthName) td ++ formatComponent (FormatComponent $ MonthNum pt) td
+formatComponent (FormatComponent MonthName) td = toJapaneseName $ tempoMonthType $ tempoMonth td
+formatComponent (FormatComponent MonthFullName) td = formatComponent (FormatComponent LeapMonthName) td ++ formatComponent (FormatComponent MonthName) td
+formatComponent (FormatComponent (DayNum pt)) td = padFunc pt $ show $ tempoDay td
 
-padFunc :: PadType -> ExpQ
-padFunc NonePad = [|id|]
-padFunc (SpacePad n) = [|pad ' ' $(litE $ IntegerL $ toInteger n)|]
-padFunc (ZeroPad n) = [|pad '0' $(litE $ IntegerL $ toInteger n)|]
+padFunc :: PadType -> String -> String
+padFunc NonePad = id
+padFunc (SpacePad n) = pad ' ' n
+padFunc (ZeroPad n) = pad '0' n
 
 pad :: Char -> Int -> String -> String
 pad c n s = let padLength = n - length s in if padLength > 0 then replicate padLength c ++ s else s

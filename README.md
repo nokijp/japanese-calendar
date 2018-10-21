@@ -38,5 +38,5 @@ main = do
   print $ toJapaneseName <$> holiday20001103  -- Just "文化の日"
 
 format :: TempoDate -> String
-format = [formatTempoDate|%y年 %M月 %d日|]
+format = [qFormatTempoDate|%y年 %M月 %d日|]
 ```
