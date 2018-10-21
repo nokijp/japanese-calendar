@@ -17,25 +17,26 @@ This library contains:
 ```haskell
 {-# LANGUAGE TemplateHaskell, QuasiQuotes #-}
 
+import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.JapaneseCalendar
 
 main :: IO ()
 main = do
   let tempoDate20010523 = tempoDate jst $ fromGregorian 2001 5 23 :: Maybe TempoDate
-  print $ format <$> tempoDate20010523  -- Just "2001年 閏4月 1日"
+  putStrLn $ format $ fromJust tempoDate20010523  -- 2001年 閏4月 1日
 
   let rokuyo20000614 = rokuyo jst $ fromGregorian 2000 6 14 :: Maybe Rokuyo
-  print $ toJapaneseName <$> rokuyo20000614  -- Just "大安"
+  putStrLn $ toJapaneseName $ fromJust rokuyo20000614  -- 大安
 
   let solarTerm20000320 = solarTerm jst $ fromGregorian 2000 3 20 :: Maybe SolarTerm
-  print $ toJapaneseName <$> solarTerm20000320  -- Just "春分"
+  putStrLn $ toJapaneseName $ fromJust solarTerm20000320  -- 春分
 
   let stemBranch20000101 = dayStemBranch $ fromGregorian 2000 1 1 :: StemBranch
-  print $ toJapaneseName stemBranch20000101  -- "戊午"
+  putStrLn $ toJapaneseName stemBranch20000101  -- 戊午
 
   let holiday20001103 = holidayType $ fromGregorian 2000 11 3 :: Maybe HolidayType
-  print $ toJapaneseName <$> holiday20001103  -- Just "文化の日"
+  putStrLn $ toJapaneseName $ fromJust holiday20001103  -- 文化の日
 
 format :: TempoDate -> String
 format = [qFormatTempoDate|%y年 %M月 %d日|]
