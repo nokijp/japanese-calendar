@@ -7,15 +7,17 @@
 
 module Data.Time.JapaneseCalendar.Internal.AstroUtils
 
--- | converts a UTC time a Julian century.
+-- | solves an equation <tt>f x = y</tt>, in case <tt>f</tt> has a similar
+--   form to sawtooth.
+solveSawtooth :: Double -> Double -> (Double -> Double) -> Int -> Double -> Double -> Double -> Double
+
+module Data.Time.JapaneseCalendar.Internal.JulianCentury
+
+-- | converts a UTC time to a Julian century in TDT.
 julianCenturyFromUTCTime :: UTCTime -> Double
 
--- | converts a Julian century a UTC time.
+-- | converts a Julian century in TDT to a UTC time.
 utcTimeFromJulianCentury :: Double -> UTCTime
-
--- | solves an equation <tt>f x = y</tt>, in case <tt>f</tt> has a similar
---   form to a sawtooth.
-solveSawtooth :: Double -> Double -> (Double -> Double) -> Int -> Double -> Double -> Double -> Double
 
 module Data.Time.JapaneseCalendar.Internal.Sun
 
