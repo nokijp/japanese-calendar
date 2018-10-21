@@ -12,12 +12,12 @@ import Data.Time.JapaneseCalendar.Internal.Sun
 
 -- | calculates ecliptic longitude of the moon in degrees from a UTC time.
 moonEclipticLongitude :: UTCTime -> Double
-moonEclipticLongitude t = (4812.67881 * jc + 218.3161 + perturbationTerm1 + perturbationTerm2) `mod'` 360
+moonEclipticLongitude t = (4812.67881 * jc * 100 + 218.3161 + perturbationTerm1 + perturbationTerm2) `mod'` 360
   where
-    jc = julianCenturyFromUTCTime t * 100
-    perturbationTerm1 = 6.2887 * sin ((4771.9886 * jc + 134.961 + perturbationSubTerm) * pi / 180)
-    perturbationSubTerm = sum $ (\(p, q, r) -> p * sin ((q * jc + r) * pi / 180)) <$> perturbationCoefficients1
-    perturbationTerm2 = sum $ (\(p, q, r) -> p * sin ((q * jc + r) * pi / 180)) <$> perturbationCoefficients2
+    jc = julianCenturyFromUTCTime t
+    perturbationTerm1 = 6.2887 * sin ((4771.9886 * jc * 100 + 134.961 + perturbationSubTerm) * pi / 180)
+    perturbationSubTerm = sum $ (\(p, q, r) -> p * sin ((q * jc * 100 + r) * pi / 180)) <$> perturbationCoefficients1
+    perturbationTerm2 = sum $ (\(p, q, r) -> p * sin ((q * jc * 100 + r) * pi / 180)) <$> perturbationCoefficients2
 
 -- | calculates the moon phase in degrees from a UTC time.
 moonPhase :: UTCTime -> Double

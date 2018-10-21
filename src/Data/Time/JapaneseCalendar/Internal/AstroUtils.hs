@@ -5,37 +5,46 @@ module Data.Time.JapaneseCalendar.Internal.AstroUtils
   ) where
 
 import Data.Fixed
+import Data.Maybe
 import Data.Time.Calendar
 import Data.Time.Clock
+import Data.Time.Clock.TAI
 
--- | converts a UTC time a Julian century.
+-- | converts a UTC time to a Julian century in TDT.
 julianCenturyFromUTCTime :: UTCTime -> Double
-julianCenturyFromUTCTime t = diffDaysDouble t j2000 / 36525
-  where
-    diffDaysDouble (UTCTime d1 dt1) (UTCTime d2 dt2) = fromIntegral (diffDays d1 d2) + daysFromDiffTime (dt1 - dt2)
+julianCenturyFromUTCTime utcTime =
+  let
+    taiTime = utcToTAI2000 utcTime
+    taiDiffSeconds = realToFrac $ diffAbsoluteTime taiTime j2000TAI
+    jc = taiDiffSeconds / centuryInSeconds
+  in jc
 
--- | converts a Julian century a UTC time.
+-- | converts a Julian century in TDT to a UTC time.
 utcTimeFromJulianCentury :: Double -> UTCTime
-utcTimeFromJulianCentury jc = UTCTime (addDays days j2000Day) diffTime
-  where
-    UTCTime j2000Day j2000DayTime = j2000
-    (days, diff) = (jc * 36525 + daysFromDiffTime j2000DayTime) `divMod'` 1
-    diffTime = picosecondsToDiffTime $ round (diff * picosecondsInDay)
+utcTimeFromJulianCentury jc =
+  let
+    taiDiffSeconds = realToFrac $ jc * centuryInSeconds
+    taiTime = addAbsoluteTime taiDiffSeconds j2000TAI
+    utcTime = taiToUTC2000 taiTime
+  in utcTime
 
-j2000 :: UTCTime
-j2000 = UTCTime (fromGregorian 2000 1 1) (secondsToDiffTime $ 12 * 60 * 60)
+centuryInSeconds :: Double
+centuryInSeconds = 36525 * 86400
 
-daysFromDiffTime :: DiffTime -> Double
-daysFromDiffTime diff = fromIntegral (diffTimeToPicoseconds diff) / picosecondsInDay
+j2000TAI :: AbsoluteTime
+j2000TAI = utcToTAI2000 $ UTCTime (fromGregorian 2000 1 1) (picosecondsToDiffTime $ (43200000 - 32184) * 10 ^ (9 :: Int))
 
-picosecondsInDay :: Double
-picosecondsInDay = 24 * 60 * 60 * 1e12
+utcToTAI2000 :: UTCTime -> AbsoluteTime
+utcToTAI2000 = fromJust . utcToTAITime (const (Just 32))
 
--- | solves an equation @f x = y@, in case @f@ has a similar form to a sawtooth.
+taiToUTC2000 :: AbsoluteTime -> UTCTime
+taiToUTC2000 = fromJust . taiToUTCTime (const (Just 32))
+
+-- | solves an equation @f x = y@, in case @f@ has a similar form to sawtooth.
 solveSawtooth
   :: Double  -- ^ the amplitude of @f@
   -> Double  -- ^ the approximated cycle of @f@
-  -> (Double -> Double)  -- ^ the function @f@, which has a similar form to a sawtooth
+  -> (Double -> Double)  -- ^ the function @f@, which has a similar form to sawtooth
   -> Int  -- ^ the max iteration number
   -> Double  -- ^ the tolerance of @x@
   -> Double  -- ^ the initial guess of @x@

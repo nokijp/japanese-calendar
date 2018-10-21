@@ -32,10 +32,10 @@ spec = do
       , (90, timeFromYMDHMS 2010 7 1 0 0 0, timeFromYMDHMS 2010 6 21 11 28 0)
       , (180, timeFromYMDHMS 2010 9 1 0 0 0, timeFromYMDHMS 2010 9 23 3 9 0)
       , (180, timeFromYMDHMS 2010 10 1 0 0 0, timeFromYMDHMS 2010 9 23 3 9 0)
-      , (270, timeFromYMDHMS 2010 12 1 0 0 0, timeFromYMDHMS 2010 12 21 23 28 0)
-      , (270, timeFromYMDHMS 2011 1 1 0 0 0, timeFromYMDHMS 2010 12 21 23 28 0)
+      , (270, timeFromYMDHMS 2010 12 1 0 0 0, timeFromYMDHMS 2010 12 21 23 38 0)
+      , (270, timeFromYMDHMS 2011 1 1 0 0 0, timeFromYMDHMS 2010 12 21 23 38 0)
       , (360, timeFromYMDHMS 2010 3 1 0 0 0, timeFromYMDHMS 2010 3 20 17 32 0)
       , (360, timeFromYMDHMS 2010 4 1 0 0 0, timeFromYMDHMS 2010 3 20 17 32 0)
       ] $ \(longitude, inputTime, expectedTime) ->
         it ("should return " ++ show expectedTime ++ " when given " ++ show (longitude, inputTime)) $
-          sunEclipticLongitudeToTime longitude inputTime `shouldSatisfy` (isAlmostEqual (20 * 60) expectedTime)
+          sunEclipticLongitudeToTime longitude inputTime `shouldSatisfy` (isAlmostEqual (10 * 60) expectedTime)
