@@ -77,7 +77,14 @@ holidayFuncTable = M.fromList
   , (fromGregorian 2003 1 1, holiday2003)
   , (fromGregorian 2007 1 1, holiday2007)
   , (fromGregorian 2016 1 1, holiday2016)
+  , (fromGregorian 2019 5 1, holiday2019)
   ]
+
+holiday2019 :: Day -> Maybe HolidayType
+holiday2019 day =
+      findScheduledHoliday scheduledHolidayRules2019 day
+  <|> transferHoliday2007 scheduledHolidayRules2019 day
+  <|> citizensHoliday1985 scheduledHolidayRules2019 day
 
 holiday2016 :: Day -> Maybe HolidayType
 holiday2016 day =
@@ -173,6 +180,26 @@ data DayOfWeek = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | S
 
 dayOfWeek :: Day -> DayOfWeek
 dayOfWeek day = let (_, _, w) = toWeekDate day in toEnum (w - 1)
+
+scheduledHolidayRules2019 :: [HolidayRule]
+scheduledHolidayRules2019 =
+  [ FixedDateRule 1 1 NewYearsDay
+  , DayOfWeekRule 1 Monday 2 ComingOfAgeDay
+  , FixedDateRule 2 11 FoundationDay
+  , FixedDateRule 2 23 TheEmperorsBirthday
+  , SolarTermRule VernalEquinox VernalEquinoxDay
+  , FixedDateRule 4 29 ShowaDay
+  , FixedDateRule 5 3 ConstitutionMemorialDay
+  , FixedDateRule 5 4 GreeneryDay
+  , FixedDateRule 5 5 ChildrensDay
+  , DayOfWeekRule 7 Monday 3 MarineDay
+  , FixedDateRule 8 11 MountainDay
+  , DayOfWeekRule 9 Monday 3 RespectForTheAgedDay
+  , SolarTermRule AutumnalEquinox AutumnalEquinoxDay
+  , DayOfWeekRule 10 Monday 2 HealthAndSportsDay
+  , FixedDateRule 11 3 CultureDay
+  , FixedDateRule 11 23 LabourThanksgivingDay
+  ]
 
 scheduledHolidayRules2016 :: [HolidayRule]
 scheduledHolidayRules2016 =
