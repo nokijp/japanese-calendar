@@ -3,7 +3,7 @@
 
 
 @package japanese-calendar
-@version 0.3.0.0
+@version 0.3.2.0
 
 module Data.Time.JapaneseCalendar.Internal.AstroUtils
 
@@ -663,6 +663,9 @@ TransferHoliday :: HolidayType
 
 -- | 国民の休日
 CitizensHoliday :: HolidayType
+
+-- | 皇室慶弔行事
+ImperialEvent :: HolidayType
 
 -- | returns a holiday type of a specified day
 holidayType :: Day -> Maybe HolidayType
