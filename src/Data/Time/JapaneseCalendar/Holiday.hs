@@ -36,6 +36,7 @@ data HolidayType =
   | TheEmperorsBirthday  -- ^ 天皇誕生日
   | TransferHoliday  -- ^ 振替休日
   | CitizensHoliday  -- ^ 国民の休日
+  | ImperialEvent  -- ^ 皇室慶弔行事
     deriving (Show, Eq)
 
 deriveJapaneseName ''HolidayType
@@ -57,6 +58,7 @@ deriveJapaneseName ''HolidayType
   , "天皇誕生日"
   , "振替休日"
   , "国民の休日"
+  , "皇室慶弔行事"
   ]
 
 -- | returns a holiday type of a specified day
@@ -135,8 +137,9 @@ holiday1948 :: Day -> Maybe HolidayType
 holiday1948 = findScheduledHoliday scheduledHolidayRules1948
 
 findScheduledHoliday :: [HolidayRule] -> Day -> Maybe HolidayType
-findScheduledHoliday rules day = asum $ ruleToHoliday <$> rules
+findScheduledHoliday rules day = imperialHoliday <|> asum (ruleToHoliday <$> rules)
   where
+    imperialHoliday = if day `elem` imperialEventDays then Just ImperialEvent else Nothing
     (_, dayMonth, dayDay) = toGregorian day
     ruleToHoliday (FixedDateRule ruleMonth ruleDay ruleHoliday) =
       if ruleMonth == dayMonth && ruleDay == dayDay
@@ -338,4 +341,14 @@ scheduledHolidayRules1948 =
   , SolarTermRule AutumnalEquinox AutumnalEquinoxDay
   , FixedDateRule 11 3 CultureDay
   , FixedDateRule 11 23 LabourThanksgivingDay
+  ]
+
+imperialEventDays :: [Day]
+imperialEventDays =
+  [ fromGregorian 1959 4 10
+  , fromGregorian 1989 2 24
+  , fromGregorian 1990 11 12
+  , fromGregorian 1993 6 9
+  , fromGregorian 2019 5 1
+  , fromGregorian 2019 10 22
   ]

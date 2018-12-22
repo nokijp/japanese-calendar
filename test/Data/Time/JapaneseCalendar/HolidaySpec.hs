@@ -83,6 +83,17 @@ spec = do
       , (fromGregorian 2019 2 23, Nothing)
       , (fromGregorian 2019 12 23, Nothing)
       , (fromGregorian 2020 2 23, Just TheEmperorsBirthday)
+
+      , (fromGregorian 2019 4 28, Nothing)
+      , (fromGregorian 2019 4 29, Just ShowaDay)
+      , (fromGregorian 2019 4 30, Just CitizensHoliday)
+      , (fromGregorian 2019 5 1, Just ImperialEvent)
+      , (fromGregorian 2019 5 2, Just CitizensHoliday)
+      , (fromGregorian 2019 5 3, Just ConstitutionMemorialDay)
+      , (fromGregorian 2019 5 4, Just GreeneryDay)
+      , (fromGregorian 2019 5 5, Just ChildrensDay)
+      , (fromGregorian 2019 5 6, Just TransferHoliday)
+      , (fromGregorian 2019 5 7, Nothing)
       ] $ \(day, holiday) ->
         it ("should return " ++ show holiday ++ " when given " ++ show day) $
           holidayType day `shouldBe` holiday
