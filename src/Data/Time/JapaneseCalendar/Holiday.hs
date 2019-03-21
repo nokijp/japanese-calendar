@@ -31,6 +31,7 @@ data HolidayType =
   | RespectForTheAgedDay  -- ^ 敬老の日
   | AutumnalEquinoxDay  -- ^ 秋分の日
   | HealthAndSportsDay  -- ^ 体育の日
+  | SportsDay  -- ^ スポーツの日
   | CultureDay  -- ^ 文化の日
   | LabourThanksgivingDay  -- ^ 勤労感謝の日
   | TheEmperorsBirthday  -- ^ 天皇誕生日
@@ -52,6 +53,7 @@ deriveJapaneseName ''HolidayType
   , "山の日"
   , "敬老の日"
   , "秋分の日"
+  , "スポーツの日"
   , "体育の日"
   , "文化の日"
   , "勤労感謝の日"
@@ -80,7 +82,21 @@ holidayFuncTable = M.fromList
   , (fromGregorian 2007 1 1, holiday2007)
   , (fromGregorian 2016 1 1, holiday2016)
   , (fromGregorian 2019 5 1, holiday2019)
+  , (fromGregorian 2020 1 1, holiday2020)
+  , (fromGregorian 2021 1 1, holiday2021)
   ]
+
+holiday2021 :: Day -> Maybe HolidayType
+holiday2021 day =
+      findScheduledHoliday scheduledHolidayRules2021 day
+  <|> transferHoliday2007 scheduledHolidayRules2019 day
+  <|> citizensHoliday1985 scheduledHolidayRules2019 day
+
+holiday2020 :: Day -> Maybe HolidayType
+holiday2020 day =
+      findScheduledHoliday scheduledHolidayRules2020 day
+  <|> transferHoliday2007 scheduledHolidayRules2019 day
+  <|> citizensHoliday1985 scheduledHolidayRules2019 day
 
 holiday2019 :: Day -> Maybe HolidayType
 holiday2019 day =
@@ -183,6 +199,46 @@ data DayOfWeek = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | S
 
 dayOfWeek :: Day -> DayOfWeek
 dayOfWeek day = let (_, _, w) = toWeekDate day in toEnum (w - 1)
+
+scheduledHolidayRules2021 :: [HolidayRule]
+scheduledHolidayRules2021 =
+  [ FixedDateRule 1 1 NewYearsDay
+  , DayOfWeekRule 1 Monday 2 ComingOfAgeDay
+  , FixedDateRule 2 11 FoundationDay
+  , FixedDateRule 2 23 TheEmperorsBirthday
+  , SolarTermRule VernalEquinox VernalEquinoxDay
+  , FixedDateRule 4 29 ShowaDay
+  , FixedDateRule 5 3 ConstitutionMemorialDay
+  , FixedDateRule 5 4 GreeneryDay
+  , FixedDateRule 5 5 ChildrensDay
+  , DayOfWeekRule 7 Monday 3 MarineDay
+  , FixedDateRule 8 11 MountainDay
+  , DayOfWeekRule 9 Monday 3 RespectForTheAgedDay
+  , SolarTermRule AutumnalEquinox AutumnalEquinoxDay
+  , DayOfWeekRule 10 Monday 2 SportsDay
+  , FixedDateRule 11 3 CultureDay
+  , FixedDateRule 11 23 LabourThanksgivingDay
+  ]
+
+scheduledHolidayRules2020 :: [HolidayRule]
+scheduledHolidayRules2020 =
+  [ FixedDateRule 1 1 NewYearsDay
+  , DayOfWeekRule 1 Monday 2 ComingOfAgeDay
+  , FixedDateRule 2 11 FoundationDay
+  , FixedDateRule 2 23 TheEmperorsBirthday
+  , SolarTermRule VernalEquinox VernalEquinoxDay
+  , FixedDateRule 4 29 ShowaDay
+  , FixedDateRule 5 3 ConstitutionMemorialDay
+  , FixedDateRule 5 4 GreeneryDay
+  , FixedDateRule 5 5 ChildrensDay
+  , FixedDateRule 7 23 MarineDay
+  , FixedDateRule 7 24 SportsDay
+  , FixedDateRule 8 10 MountainDay
+  , DayOfWeekRule 9 Monday 3 RespectForTheAgedDay
+  , SolarTermRule AutumnalEquinox AutumnalEquinoxDay
+  , FixedDateRule 11 3 CultureDay
+  , FixedDateRule 11 23 LabourThanksgivingDay
+  ]
 
 scheduledHolidayRules2019 :: [HolidayRule]
 scheduledHolidayRules2019 =
