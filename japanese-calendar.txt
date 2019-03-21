@@ -649,6 +649,9 @@ AutumnalEquinoxDay :: HolidayType
 -- | 体育の日
 HealthAndSportsDay :: HolidayType
 
+-- | スポーツの日
+SportsDay :: HolidayType
+
 -- | 文化の日
 CultureDay :: HolidayType
 
