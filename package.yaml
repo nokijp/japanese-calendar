@@ -6,11 +6,17 @@ dependencies:
 - template-haskell
 - time
 
+ghc-options:
+- -Wall
+- -Werror
+- -Widentities
+- -Wmissing-export-lists
+- -Wmissing-exported-signatures
+- -Wpartial-fields
+- -Wredundant-constraints
+
 library:
   source-dirs: src
-  ghc-options:
-  - -Wall
-  - -Werror
   dependencies:
   - containers
   - parsec
@@ -24,8 +30,6 @@ tests:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    - -Wall
-    - -Werror
     dependencies:
     - japanese-calendar
     - hspec
