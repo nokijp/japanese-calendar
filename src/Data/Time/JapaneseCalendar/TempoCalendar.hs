@@ -103,7 +103,8 @@ tempoMonthsInAYear zone day = singletonToMaybe (filter isLastKannazuki $ interva
   where
     seeds = takeWhile (\(MonthSeed _ lastDay _) -> lastDay < nextYearWinterSolsticeDate) $ monthSeeds zone currentYearWinterSolsticeDate
     (currentYearWinterSolsticeDate, nextYearWinterSolsticeDate) = currentAndNextYearWinterSolticeDates zone day
-    isLastKannazuki = (\(TempoMonthInterval month _ _) -> tempoMonthType month == Kannazuki) . last
+    isLastKannazuki [] = False
+    isLastKannazuki xs = (\(TempoMonthInterval month _ _) -> tempoMonthType month == Kannazuki) $ last xs
     singletonToMaybe [x] = Just x
     singletonToMaybe _ = Nothing
 

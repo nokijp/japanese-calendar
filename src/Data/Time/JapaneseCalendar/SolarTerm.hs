@@ -93,10 +93,11 @@ nearestSolarTerm zone day = fromIndex zone index day
 
 -- | creates a list of solar terms starting with the nearest solar term from a specified day
 solarTermsFrom :: TimeZone -> Day -> [(SolarTerm, Day)]
-solarTermsFrom zone day = firstElem : solarTermsFrom zone nextSeed
+solarTermsFrom zone day = scanl (\(_, d) i -> fromIndex zone i $ addDays 15 d) firstElem restIndices
   where
-    firstElem@(_, firstElemDay) = nearestSolarTerm zone day
-    nextSeed = addDays 15 firstElemDay
+    firstElem@(firstSolarTerm, _) = nearestSolarTerm zone day
+    firstIndex = fromEnum firstSolarTerm
+    restIndices = cycle $ (`mod` 24) <$> take 24 [(firstIndex + 1)..]
 
 -- | finds the nearest specified solar term
 findNearestSolarTerm :: TimeZone -> SolarTerm -> Day -> Day
