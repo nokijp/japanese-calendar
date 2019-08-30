@@ -148,7 +148,7 @@ collectMonthSeeds ((firstDay, lastDay) : restIntervals) centerPoints = item : re
 collectMonthSeeds [] _ = []
 
 newMoonDatesFrom :: TimeZone -> Day -> [Day]
-newMoonDatesFrom zone day = utcTimeToDay <$> unfoldr (\d -> Just (d, succNewMoon d)) latest
+newMoonDatesFrom zone day = utcTimeToDay <$> iterate succNewMoon latest
   where
     utcStartTime = localTimeToUTC zone (LocalTime day midnight)
     addUTCDays days = addUTCTime $ fromRational $ days * 24 * 60 * 60
