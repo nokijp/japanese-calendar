@@ -108,13 +108,30 @@ spec = do
       , (fromGregorian 2021 5 3, Just ConstitutionMemorialDay)
       , (fromGregorian 2021 5 4, Just GreeneryDay)
       , (fromGregorian 2021 5 5, Just ChildrensDay)
-      , (fromGregorian 2021 7 19, Just MarineDay)
-      , (fromGregorian 2021 8 11, Just MountainDay)
+      , (fromGregorian 2021 7 22, Just MarineDay)
+      , (fromGregorian 2021 7 23, Just SportsDay)
+      , (fromGregorian 2021 8 8, Just MountainDay)
       , (fromGregorian 2021 9 20, Just RespectForTheAgedDay)
       , (fromGregorian 2021 9 23, Just AutumnalEquinoxDay)
-      , (fromGregorian 2021 10 11, Just SportsDay)
       , (fromGregorian 2021 11 3, Just CultureDay)
       , (fromGregorian 2021 11 23, Just LabourThanksgivingDay)
+
+      , (fromGregorian 2022 1 1, Just NewYearsDay)
+      , (fromGregorian 2022 1 10, Just ComingOfAgeDay)
+      , (fromGregorian 2022 2 11, Just FoundationDay)
+      , (fromGregorian 2022 2 23, Just TheEmperorsBirthday)
+      , (fromGregorian 2022 3 21, Just VernalEquinoxDay)
+      , (fromGregorian 2022 4 29, Just ShowaDay)
+      , (fromGregorian 2022 5 3, Just ConstitutionMemorialDay)
+      , (fromGregorian 2022 5 4, Just GreeneryDay)
+      , (fromGregorian 2022 5 5, Just ChildrensDay)
+      , (fromGregorian 2022 7 18, Just MarineDay)
+      , (fromGregorian 2022 8 11, Just MountainDay)
+      , (fromGregorian 2022 9 19, Just RespectForTheAgedDay)
+      , (fromGregorian 2022 9 23, Just AutumnalEquinoxDay)
+      , (fromGregorian 2022 10 10, Just SportsDay)
+      , (fromGregorian 2022 11 3, Just CultureDay)
+      , (fromGregorian 2022 11 23, Just LabourThanksgivingDay)
       ] $ \(day, holiday) ->
         it ("should return " ++ show holiday ++ " when given " ++ show day) $
           holidayType day `shouldBe` holiday
@@ -126,7 +143,8 @@ spec = do
       , (2016, 17)
       , (2019, 22)
       , (2020, 18)
-      , (2021, 16)
+      , (2021, 17)
+      , (2022, 16)
       ] $ \(year, holidayNum) -> do
         let
           days = [fromGregorian year 1 1 .. fromGregorian year 12 31]

@@ -84,19 +84,26 @@ holidayFuncTable = M.fromList
   , (fromGregorian 2019 5 1, holiday2019)
   , (fromGregorian 2020 1 1, holiday2020)
   , (fromGregorian 2021 1 1, holiday2021)
+  , (fromGregorian 2022 1 1, holiday2022)
   ]
+
+holiday2022 :: Day -> Maybe HolidayType
+holiday2022 day =
+      findScheduledHoliday scheduledHolidayRules2022 day
+  <|> transferHoliday2007 scheduledHolidayRules2022 day
+  <|> citizensHoliday1985 scheduledHolidayRules2022 day
 
 holiday2021 :: Day -> Maybe HolidayType
 holiday2021 day =
       findScheduledHoliday scheduledHolidayRules2021 day
-  <|> transferHoliday2007 scheduledHolidayRules2019 day
-  <|> citizensHoliday1985 scheduledHolidayRules2019 day
+  <|> transferHoliday2007 scheduledHolidayRules2021 day
+  <|> citizensHoliday1985 scheduledHolidayRules2021 day
 
 holiday2020 :: Day -> Maybe HolidayType
 holiday2020 day =
       findScheduledHoliday scheduledHolidayRules2020 day
-  <|> transferHoliday2007 scheduledHolidayRules2019 day
-  <|> citizensHoliday1985 scheduledHolidayRules2019 day
+  <|> transferHoliday2007 scheduledHolidayRules2020 day
+  <|> citizensHoliday1985 scheduledHolidayRules2020 day
 
 holiday2019 :: Day -> Maybe HolidayType
 holiday2019 day =
@@ -200,8 +207,8 @@ data DayOfWeek = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | S
 dayOfWeek :: Day -> DayOfWeek
 dayOfWeek day = let (_, _, w) = toWeekDate day in toEnum (w - 1)
 
-scheduledHolidayRules2021 :: [HolidayRule]
-scheduledHolidayRules2021 =
+scheduledHolidayRules2022 :: [HolidayRule]
+scheduledHolidayRules2022 =
   [ FixedDateRule 1 1 NewYearsDay
   , DayOfWeekRule 1 Monday 2 ComingOfAgeDay
   , FixedDateRule 2 11 FoundationDay
@@ -216,6 +223,26 @@ scheduledHolidayRules2021 =
   , DayOfWeekRule 9 Monday 3 RespectForTheAgedDay
   , SolarTermRule AutumnalEquinox AutumnalEquinoxDay
   , DayOfWeekRule 10 Monday 2 SportsDay
+  , FixedDateRule 11 3 CultureDay
+  , FixedDateRule 11 23 LabourThanksgivingDay
+  ]
+
+scheduledHolidayRules2021 :: [HolidayRule]
+scheduledHolidayRules2021 =
+  [ FixedDateRule 1 1 NewYearsDay
+  , DayOfWeekRule 1 Monday 2 ComingOfAgeDay
+  , FixedDateRule 2 11 FoundationDay
+  , FixedDateRule 2 23 TheEmperorsBirthday
+  , SolarTermRule VernalEquinox VernalEquinoxDay
+  , FixedDateRule 4 29 ShowaDay
+  , FixedDateRule 5 3 ConstitutionMemorialDay
+  , FixedDateRule 5 4 GreeneryDay
+  , FixedDateRule 5 5 ChildrensDay
+  , FixedDateRule 7 22 MarineDay
+  , FixedDateRule 7 23 SportsDay
+  , FixedDateRule 8 8 MountainDay
+  , DayOfWeekRule 9 Monday 3 RespectForTheAgedDay
+  , SolarTermRule AutumnalEquinox AutumnalEquinoxDay
   , FixedDateRule 11 3 CultureDay
   , FixedDateRule 11 23 LabourThanksgivingDay
   ]
