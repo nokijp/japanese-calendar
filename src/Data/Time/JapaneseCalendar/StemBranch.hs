@@ -27,7 +27,7 @@ data Stem =
   | Kanoto  -- ^ 辛
   | Mizunoe  -- ^ 壬
   | Mizunoto  -- ^ 癸
-    deriving (Show, Eq, Bounded, Enum)
+    deriving (Show, Eq, Ord, Bounded, Enum)
 
 deriveJapaneseName ''Stem ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 
@@ -45,7 +45,7 @@ data Branch =
   | Rooster  -- ^ 酉
   | Dog  -- ^ 戌
   | Pig  -- ^ 亥
-    deriving (Show, Eq, Bounded, Enum)
+    deriving (Show, Eq, Ord, Bounded, Enum)
 
 deriveJapaneseName ''Branch ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
 
@@ -111,7 +111,7 @@ data StemBranch =
   | KanotoRooster  -- ^ 辛酉
   | MizunoeDog  -- ^ 壬戌
   | MizunotoPig  -- ^ 癸亥
-    deriving (Show, Eq, Bounded, Enum)
+    deriving (Show, Eq, Ord, Bounded, Enum)
 
 instance JapaneseName StemBranch where
   toJapaneseName = (\(s, b) -> toJapaneseName s ++ toJapaneseName b) . stemBranchToStemAndBranch

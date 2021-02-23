@@ -19,7 +19,7 @@ data Rokuyo =
   | Butsumetsu  -- ^ 仏滅
   | Taian  -- ^ 大安
   | Shakko  -- ^ 赤口
-    deriving (Show, Eq, Enum, Bounded)
+    deriving (Show, Eq, Ord, Enum, Bounded)
 
 deriveJapaneseName ''Rokuyo ["先勝", "友引", "先負", "仏滅", "大安", "赤口"]
 

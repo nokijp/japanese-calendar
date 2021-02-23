@@ -43,7 +43,7 @@ data SolarTerm =
   | StartOfSpring  -- ^ 立春
   | RainWater  -- ^ 雨水
   | AwakeningOfInsects  -- ^ 啓蟄
-    deriving (Show, Eq, Bounded, Enum)
+    deriving (Show, Eq, Ord, Bounded, Enum)
 
 deriveJapaneseName ''SolarTerm
   [ "春分"
