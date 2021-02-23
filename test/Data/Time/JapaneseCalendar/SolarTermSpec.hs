@@ -41,6 +41,24 @@ spec = do
         it ("should return Nothing when given a day " ++ show day ++ " which is not a start day of a solar term") $
           solarTerm jst day `shouldBe` Nothing
 
+  describe "latestSolarTerm" $ do
+    forM_
+      [ (fromGregorian 2000 3 19, AwakeningOfInsects, fromGregorian 2000 3 5)
+      , (fromGregorian 2000 3 20, VernalEquinox, fromGregorian 2000 3 20)
+      , (fromGregorian 2000 3 21, VernalEquinox, fromGregorian 2000 3 20)
+      , (fromGregorian 2000 4 3, VernalEquinox, fromGregorian 2000 3 20)
+      , (fromGregorian 2000 4 4, ClearAndBright, fromGregorian 2000 4 4)
+      , (fromGregorian 2000 4 5, ClearAndBright, fromGregorian 2000 4 4)
+      , (fromGregorian 2001 3 4, RainWater, fromGregorian 2001 2 18)
+      , (fromGregorian 2001 3 5, AwakeningOfInsects, fromGregorian 2001 3 5)
+      , (fromGregorian 2001 3 6, AwakeningOfInsects, fromGregorian 2001 3 5)
+      , (fromGregorian 2010 3 20, AwakeningOfInsects, fromGregorian 2010 3 6)
+      , (fromGregorian 2010 3 21, VernalEquinox, fromGregorian 2010 3 21)
+      , (fromGregorian 2010 3 22, VernalEquinox, fromGregorian 2010 3 21)
+      ] $ \(day, term, termDay) ->
+        it ("should return the latest solar term " ++ show term ++ " and its date " ++ show termDay ++ " when given a day " ++ show day) $
+          latestSolarTerm jst day `shouldBe` (term, termDay)
+
   describe "nearestSolarTerm" $ do
     forM_
       [ (fromGregorian 2000 3 19, VernalEquinox, fromGregorian 2000 3 20)

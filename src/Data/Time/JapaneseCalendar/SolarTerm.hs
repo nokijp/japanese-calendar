@@ -5,6 +5,7 @@ module Data.Time.JapaneseCalendar.SolarTerm
   , isSegmentPoint
   , isCenterPoint
   , solarTerm
+  , latestSolarTerm
   , nearestSolarTerm
   , solarTermsFrom
   , findNearestSolarTerm
@@ -83,10 +84,17 @@ isCenterPoint = not . isSegmentPoint
 solarTerm :: TimeZone -> Day -> Maybe SolarTerm
 solarTerm zone day = if startTerm /= endTerm then Just endTerm else Nothing
   where
-    startTerm = latestSolarTerm startOfDay
-    endTerm = latestSolarTerm endOfDay
+    startTerm = latestSolarTermUTC startOfDay
+    endTerm = latestSolarTermUTC endOfDay
     startOfDay = localTimeToUTC zone (LocalTime day midnight)
     endOfDay = localTimeToUTC zone (LocalTime (succ day) midnight)
+
+-- | finds the latest solar term
+latestSolarTerm :: TimeZone -> Day -> (SolarTerm, Day)
+latestSolarTerm zone day = (term, findNearestSolarTerm zone term day)
+  where
+    term = latestSolarTermUTC utcTime
+    utcTime = localTimeToUTC zone (LocalTime (succ day) midnight)
 
 -- | finds the nearest solar term
 nearestSolarTerm :: TimeZone -> Day -> (SolarTerm, Day)
@@ -113,8 +121,8 @@ findNearestSolarTerm zone term day = divisionDay
     divisionTime = utcToZonedTime zone divisionUTCTime
     divisionDay = localDay $ zonedTimeToLocalTime divisionTime
 
-latestSolarTerm :: UTCTime -> SolarTerm
-latestSolarTerm utcTime = term
+latestSolarTermUTC :: UTCTime -> SolarTerm
+latestSolarTermUTC utcTime = term
   where
     term = toEnum index
     index = floor (sunEclipticLongitude utcTime / 15) `mod` 24
