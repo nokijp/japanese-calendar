@@ -11,6 +11,7 @@ module Data.Time.JapaneseCalendar.SolarTerm
   ) where
 
 import Data.Time.Calendar
+import Data.Time.Clock
 import Data.Time.JapaneseCalendar.Internal.Sun
 import Data.Time.JapaneseCalendar.JapaneseName
 import Data.Time.LocalTime
@@ -70,43 +71,50 @@ deriveJapaneseName ''SolarTerm
   , "啓蟄"
   ]
 
--- | tests whether a solar term is a segment point, sekki
+-- | tests whether the solar term is a segment point, sekki
 isSegmentPoint :: SolarTerm -> Bool
 isSegmentPoint term = fromEnum term `mod` 2 == 1
 
--- | tests whether a solar term is a center point, chuki
+-- | tests whether the solar term is a center point, chuki
 isCenterPoint :: SolarTerm -> Bool
 isCenterPoint = not . isSegmentPoint
 
--- | returns a solar term of a specified day
+-- | returns the solar term of the specified day
 solarTerm :: TimeZone -> Day -> Maybe SolarTerm
-solarTerm zone day = if day == divisionDay then Just term else Nothing
+solarTerm zone day = if startTerm /= endTerm then Just endTerm else Nothing
   where
-    (term, divisionDay) = nearestSolarTerm zone day
+    startTerm = latestSolarTerm startOfDay
+    endTerm = latestSolarTerm endOfDay
+    startOfDay = localTimeToUTC zone (LocalTime day midnight)
+    endOfDay = localTimeToUTC zone (LocalTime (succ day) midnight)
 
 -- | finds the nearest solar term
 nearestSolarTerm :: TimeZone -> Day -> (SolarTerm, Day)
-nearestSolarTerm zone day = fromIndex zone index day
+nearestSolarTerm zone day = (term, findNearestSolarTerm zone term day)
   where
-    utcTime = localTimeToUTC zone (LocalTime day midday)
+    term = toEnum index
     index = round (sunEclipticLongitude utcTime / 15) `mod` 24
+    utcTime = localTimeToUTC zone (LocalTime day midday)
 
--- | creates a list of solar terms starting with the nearest solar term from a specified day
+-- | creates a list of solar terms starting with the nearest solar term from the specified day
 solarTermsFrom :: TimeZone -> Day -> [(SolarTerm, Day)]
-solarTermsFrom zone day = scanl (\(_, d) i -> fromIndex zone i $ addDays 15 d) firstElem restIndices
+solarTermsFrom zone day = scanl (\(_, d) term -> (term, findNearestSolarTerm zone term $ addDays 15 d)) firstElem restSolarTerms
   where
     firstElem@(firstSolarTerm, _) = nearestSolarTerm zone day
     firstIndex = fromEnum firstSolarTerm
-    restIndices = cycle $ (`mod` 24) <$> take 24 [(firstIndex + 1)..]
+    restSolarTerms = cycle $ toEnum . (`mod` 24) <$> take 24 [(firstIndex + 1)..]
 
 -- | finds the nearest specified solar term
 findNearestSolarTerm :: TimeZone -> SolarTerm -> Day -> Day
-findNearestSolarTerm zone term day = snd $ fromIndex zone (fromEnum term) day
-
-fromIndex :: TimeZone -> Int -> Day -> (SolarTerm, Day)
-fromIndex zone index day = (toEnum index, divisionDay)
+findNearestSolarTerm zone term day = divisionDay
   where
     utcTime = localTimeToUTC zone (LocalTime day midday)
-    divisionUTCTime = sunEclipticLongitudeToTime (fromIntegral $ index * 15) utcTime
+    divisionUTCTime = sunEclipticLongitudeToTime (fromIntegral $ fromEnum term * 15) utcTime
     divisionTime = utcToZonedTime zone divisionUTCTime
     divisionDay = localDay $ zonedTimeToLocalTime divisionTime
+
+latestSolarTerm :: UTCTime -> SolarTerm
+latestSolarTerm utcTime = term
+  where
+    term = toEnum index
+    index = floor (sunEclipticLongitude utcTime / 15) `mod` 24
